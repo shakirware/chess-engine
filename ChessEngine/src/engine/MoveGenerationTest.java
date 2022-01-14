@@ -34,5 +34,53 @@ public class MoveGenerationTest {
 		assertTrue(array.containsAll(moves));
 		assertTrue(moves.containsAll(array));
 	}
+	
+	@Test
+	public void testKnight() {
+		ArrayList<Integer> array = new ArrayList<Integer>();
+		array.add(4);
+		array.add(6);
+		array.add(51);
+		array.add(19);
+		array.add(23);
+		array.add(55);
+		array.add(68);
+		array.add(70);
+		
+		Board board = new Board();
+		
+		// Place a black knight
+		board.board[37] = 8;
+		
+		ArrayList<Integer> moves =  board.getKnightMoves(37);
+		
+		//System.out.println(moves);
+		//System.out.println(array);
+		
+		assertEquals(array.size(), moves.size());
+		assertTrue(array.containsAll(moves));
+		assertTrue(moves.containsAll(array));
+	}
+	
+	@Test
+	public void testKnight1() {
+		ArrayList<Integer> array = new ArrayList<Integer>();
+		array.add(66);
+		array.add(49);
+		
+		Board board = new Board();
+		
+		// Place a black knight
+		board.board[80] = 8;
+		
+		ArrayList<Integer> moves =  board.getKnightMoves(80);
+		
+		//System.out.println(moves);
+		//System.out.println(array);
+		
+		assertEquals(array.size(), moves.size());
+		assertTrue(array.containsAll(moves));
+		assertTrue(moves.containsAll(array));
+	}
 
 }
