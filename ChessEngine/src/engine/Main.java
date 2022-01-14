@@ -16,9 +16,9 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		Board board = new Board();
-		System.out.println(board.getRookMoves(86));
-		board.colour = BLACK;
-		System.out.println(board.getRookMoves(86));
+		
+		//System.out.println(board.getKingMoves(35));
+		System.out.println(board.board[17]);
 
 	}
 
