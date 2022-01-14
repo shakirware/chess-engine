@@ -101,6 +101,97 @@ public class Board {
 		return moves;
 	}
 	
+	public ArrayList<Integer> getWhitePawnMoves(int position) {
+		ArrayList<Integer> moves = new ArrayList<Integer>();
+		int new_position = position + 16;
+		// non capture moves
+		if (onBoard(new_position) && board[new_position] == 0) {
+			if (new_position >= 0 && new_position <= 7) {
+				// handle pawn promotion
+				moves.add(new_position);
+			}
+			else {
+				// one square
+				moves.add(new_position);
+				// two squares
+				new_position = position + 32;
+				if ((position >= 96 && position <= 103) && board[new_position] == 0) {
+					moves.add(new_position);
+				}
+			}
+		}
+		//capture moves
+		int Wpawn_offsets[] = {15, 17};
+		
+		for (int i : Wpawn_offsets) {
+			new_position = position + i;
+			if (onBoard(new_position)) {
+				int piece = this.board[new_position];
+				if (
+						(new_position >= 0 && new_position <= 7) &&
+						(piece >= 7 && piece <= 12)
+						) {
+					// handle pawn promotion
+					moves.add(new_position);
+				}
+				
+				else {
+					if (piece >= 7 && piece <= 12) {
+						moves.add(new_position);
+					}
+					
+					// add enpassant
+				}
+			}
+		}
+		return moves;
+	}
+	
+	public ArrayList<Integer> getBlackPawnMoves(int position) {
+		ArrayList<Integer> moves = new ArrayList<Integer>();
+		int new_position = position - 16;
+		// non capture moves
+		if (onBoard(new_position) && board[new_position] == 0) {
+			if (new_position >= 0 && new_position <= 7) {
+				// handle pawn promotion
+				moves.add(new_position);
+			}
+			else {
+				// one square
+				moves.add(new_position);
+				// two squares
+				new_position = position - 32;
+				if ((position >= 96 && position <= 103) && board[new_position] == 0) {
+					moves.add(new_position);
+				}
+			}
+		}
+		//capture moves
+		int Bpawn_offsets[] = {-15, -17};
+		for (int i : Bpawn_offsets) {
+			new_position = position + i;
+			if (onBoard(new_position)) {
+				int piece = this.board[new_position];
+				if (
+						(new_position >= 112 && new_position <= 119) &&
+						(piece >= 1 && piece <= 6)
+						) {
+					// handle pawn promotion
+					moves.add(new_position);
+				}
+				
+				else {
+					if (piece >= 1 && piece <= 6) {
+						moves.add(new_position);
+					}
+					// add enpassant
+				}
+			}
+		}
+		return moves;
+	}
+	
+	
 	
 	
 	// return if position is on the board
