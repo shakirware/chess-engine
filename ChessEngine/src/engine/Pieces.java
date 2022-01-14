@@ -12,7 +12,7 @@ public class Pieces {
 	public static final boolean WHITE = true;
 	public static final boolean BLACK = false;
 	public static final int EMPTY = 0;
-	// BLACK PIECES
+	// WHITE PIECES
 	public static final int WPAWN = 1;
 	public static final int WKNIGHT = 2;
 	public static final int WBISHOP = 3;
