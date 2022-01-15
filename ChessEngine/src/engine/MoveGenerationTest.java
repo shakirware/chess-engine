@@ -279,6 +279,16 @@ public class MoveGenerationTest {
 		assertTrue(result);
 	}
 	
+	@Test
+	public void testCheck() {		
+		Board board = new Board();
+		
+		// Place a black queen
+		board.board[20] = 11;
+		
+		boolean check = board.isCheck();
+		assertTrue(check);
+	}
 	
 
 }

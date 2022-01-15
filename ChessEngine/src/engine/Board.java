@@ -292,7 +292,30 @@ public class Board {
 		return moves;
 	}
 
-	boolean isSquareAttacked(int position) {
+	
+	public boolean isCheck() {
+		int king_square = 0;
+		
+		for (int square = 0; square < 128; square++) {
+			if (onBoard(square)) {
+				if (this.colour) {
+					if (board[square] == 6) {
+						king_square = square;
+					}
+				}
+				else {
+					if (board[square] == 12) {
+						king_square = square;
+					}
+				}
+			}
+		}
+		return isSquareAttacked(king_square);
+	}
+	
+	
+	
+	public boolean isSquareAttacked(int position) {
 		// pawns
 		if (this.colour) {
 			if (onBoard(position + 15) && (board[position + 15] == 7)) {
