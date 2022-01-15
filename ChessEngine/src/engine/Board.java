@@ -98,22 +98,7 @@ public class Board {
 		for (int i : bishop_offsets) {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
-
-				/*
-				// if piece is black and hits it own
-				if (board[position] >= 7 && board[position] <= 12) {
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
-						break;
-					}
-				}
-				// if piece is white and hits it own
-				if (board[position] >= 1 && board[position] <= 6) {
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
-						break;
-					}
-				}
 				
-				*/
 				// if piece is black and hits opps piece
 				if (board[position] >= 7 && board[position] <= 12) {
 					if (board[new_position] >= 1 && board[new_position] <= 6) {
@@ -121,7 +106,6 @@ public class Board {
 						break;
 					}
 				}
-				
 
 				// if piece is white and hits opps piece
 				if (board[position] >= 1 && board[position] <= 6) {
@@ -140,6 +124,38 @@ public class Board {
 		}			
 		return moves;
 	}
+	
+	public ArrayList<Integer> getQueenMoves(int position) {
+		int queen_offsets[] = {16, -16, 1, -1, 15, 17, -15, -17};
+		ArrayList<Integer> moves = new ArrayList<Integer>();
+		for (int i : queen_offsets) {
+			int new_position = position + i;
+			while (onBoard(new_position)) {
+				// if piece is black and hits opps piece
+				if (board[position] >= 7 && board[position] <= 12) {
+					if (board[new_position] >= 1 && board[new_position] <= 6) {
+						moves.add(new_position);
+						break;
+					}
+				}
+
+				// if piece is white and hits opps piece
+				if (board[position] >= 1 && board[position] <= 6) {
+					if (board[new_position] >= 7 && board[new_position] <= 12) {
+						moves.add(new_position);
+						break;
+					}
+				}
+
+				// if empty square
+				if (board[new_position] == 0) {
+					moves.add(new_position);
+				}
+				new_position += i;
+			}			
+		}
+		return moves;
+	}
 
 	public ArrayList<Integer> getRookMoves(int position) {
 		int rook_offsets[] = {16, -16, 1, -1};
@@ -149,18 +165,22 @@ public class Board {
 			while (onBoard(new_position)) {
 				int piece = this.board[new_position];
 				
-				
-				
-				
-				
-				if (colour ? (piece >= 1 && piece <= 6) : ((piece >= 7 && piece <= 12))) {
-					break;
+				// if piece is black and hits opps piece
+				if (board[position] >= 7 && board[position] <= 12) {
+					if (board[new_position] >= 1 && board[new_position] <= 6) {
+						moves.add(new_position);
+						break;
+					}
 				}
-				if (colour ? (piece >= 7 && piece <= 12) : ((piece >= 1 && piece <= 6))) {
-					moves.add(new_position);
-					break;
+				// if piece is white and hits opps piece
+				if (board[position] >= 1 && board[position] <= 6) {
+					if (board[new_position] >= 7 && board[new_position] <= 12) {
+						moves.add(new_position);
+						break;
+					}
 				}
-				if (piece == 0) {
+				
+				if (board[new_position] == 0) {
 					moves.add(new_position);
 				}
 				new_position += i;
@@ -183,7 +203,7 @@ public class Board {
 				moves.add(new_position);
 				// two squares
 				new_position = position + 32;
-				if ((position >= 96 && position <= 103) && board[new_position] == 0) {
+				if ((position >= 16 && position <= 23) && board[new_position] == 0) {
 					moves.add(new_position);
 				}
 			}
@@ -194,17 +214,15 @@ public class Board {
 		for (int i : Wpawn_offsets) {
 			new_position = position + i;
 			if (onBoard(new_position)) {
-				int piece = this.board[new_position];
 				if (
 						(new_position >= 0 && new_position <= 7) &&
-						(piece >= 7 && piece <= 12)
+						(board[new_position] >= 7 && board[new_position] <= 12)
 						) {
 					// handle pawn promotion
 					moves.add(new_position);
 				}
-
 				else {
-					if (piece >= 7 && piece <= 12) {
+					if (board[new_position] >= 7 && board[new_position] <= 12) {
 						moves.add(new_position);
 					}
 
@@ -239,17 +257,15 @@ public class Board {
 		for (int i : Bpawn_offsets) {
 			new_position = position + i;
 			if (onBoard(new_position)) {
-				int piece = this.board[new_position];
 				if (
 						(new_position >= 112 && new_position <= 119) &&
-						(piece >= 1 && piece <= 6)
+						(board[new_position] >= 1 && board[new_position] <= 6)
 						) {
 					// handle pawn promotion
 					moves.add(new_position);
 				}
-
 				else {
-					if (piece >= 1 && piece <= 6) {
+					if (board[new_position] >= 1 && board[new_position] <= 6) {
 						moves.add(new_position);
 					}
 					// add enpassant
@@ -258,8 +274,8 @@ public class Board {
 		}
 		return moves;
 	}
-
-
+	
+	
 
 
 	// return if position is on the board
