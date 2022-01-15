@@ -266,6 +266,18 @@ public class MoveGenerationTest {
 		assertTrue(moves.containsAll(array));
 	}
 	
+	@Test
+	public void testSquareAttacked() {		
+		Board board = new Board();
+		
+		// Place a black queen
+		//board.board[51] = 11;
+		//System.out.println(board.getQueenMoves(51));
+		System.out.println(board.getRookMoves(112));
+		boolean result = board.isSquareAttacked(32);
+		assertTrue(result);
+	}
+	
 	
 
 }
