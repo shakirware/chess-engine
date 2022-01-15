@@ -34,6 +34,15 @@ public class Board {
 		this.colour = WHITE;
 	}
 
+	public Board(Board board) {
+		this.board = board.getBoard();
+		this.colour = WHITE;
+	}
+
+	public int[] getBoard() {
+		return this.board.clone();
+	}
+
 	public ArrayList<Integer> getKnightMoves(int position) {
 		int knight_offsets[] = {33, 31, 18, 14, -33, -31, -18, -14};
 		ArrayList<Integer> moves = new ArrayList<Integer>();
@@ -42,20 +51,20 @@ public class Board {
 			if (onBoard(new_position)) {
 
 				// if piece is black
-				if (board[position] >= 7 && board[position] <= 12) {
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
+				if (this.board[position] >= 7 && this.board[position] <= 12) {
+					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
 					}
 				}
 
 				// if piece is white
-				if (board[position] >= 1 && board[position] <= 6) {
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
+				if (this.board[position] >= 1 && this.board[position] <= 6) {
+					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
 					}
 				}
 
-				if (board[new_position] == 0) {
+				if (this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
 			}
@@ -71,20 +80,20 @@ public class Board {
 			if (onBoard(new_position)) {
 
 				// if piece is black
-				if (board[position] >= 7 && board[position] <= 12) {
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
+				if (this.board[position] >= 7 && this.board[position] <= 12) {
+					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
 					}
 				}
 
 				// if piece is white
-				if (board[position] >= 1 && board[position] <= 6) {
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
+				if (this.board[position] >= 1 && this.board[position] <= 6) {
+					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
 					}
 				}
 
-				if (board[new_position] == 0) {
+				if (this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
 			}			
@@ -101,29 +110,29 @@ public class Board {
 			while (onBoard(new_position)) {
 
 				// if piece is black and hits opps piece
-				if (board[position] >= 7 && board[position] <= 12) {
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
+				if (this.board[position] >= 7 && this.board[position] <= 12) {
+					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
 						break;
 					}
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
+					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						break;
 					}
 				}
 
 				// if piece is white and hits opps piece
-				if (board[position] >= 1 && board[position] <= 6) {
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
+				if (this.board[position] >= 1 && this.board[position] <= 6) {
+					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
 						break;
 					}
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
+					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						break;
 					}
 				}
 
 				// if empty square
-				if (board[new_position] == 0) {
+				if (this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
 				new_position += i;
@@ -139,29 +148,29 @@ public class Board {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
 				// if piece is black and hits opps piece
-				if (board[position] >= 7 && board[position] <= 12) {
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
+				if (this.board[position] >= 7 && this.board[position] <= 12) {
+					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
 						break;
 					}
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
+					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						break;
 					}
 				}
 
 				// if piece is white and hits opps piece
-				if (board[position] >= 1 && board[position] <= 6) {
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
+				if (this.board[position] >= 1 && this.board[position] <= 6) {
+					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
 						break;
 					}
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
+					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						break;
 					}
 				}
 
 				// if empty square
-				if (board[new_position] == 0) {
+				if (this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
 				new_position += i;
@@ -178,27 +187,27 @@ public class Board {
 			while (onBoard(new_position)) {
 
 				// if piece is black and hits opps piece or its own piece
-				if (board[position] >= 7 && board[position] <= 12) {
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
+				if (this.board[position] >= 7 && this.board[position] <= 12) {
+					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
 						break;
 					}
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
+					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						break;
 					}
 				}
 				// if piece is white and hits opps piece or its own piece
-				if (board[position] >= 1 && board[position] <= 6) {
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
+				if (this.board[position] >= 1 && this.board[position] <= 6) {
+					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
 						break;
 					}
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
+					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						break;
 					}
 				}
 
-				if (board[new_position] == 0) {
+				if (this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
 				new_position += i;
@@ -211,7 +220,7 @@ public class Board {
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int new_position = position + 16;
 		// non capture moves
-		if (onBoard(new_position) && board[new_position] == 0) {
+		if (onBoard(new_position) && this.board[new_position] == 0) {
 			if (new_position >= 0 && new_position <= 7) {
 				// handle pawn promotion
 				moves.add(new_position);
@@ -221,7 +230,7 @@ public class Board {
 				moves.add(new_position);
 				// two squares
 				new_position = position + 32;
-				if ((position >= 16 && position <= 23) && board[new_position] == 0) {
+				if ((position >= 16 && position <= 23) && this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
 			}
@@ -234,13 +243,13 @@ public class Board {
 			if (onBoard(new_position)) {
 				if (
 						(new_position >= 0 && new_position <= 7) &&
-						(board[new_position] >= 7 && board[new_position] <= 12)
+						(this.board[new_position] >= 7 && this.board[new_position] <= 12)
 						) {
 					// handle pawn promotion
 					moves.add(new_position);
 				}
 				else {
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
+					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
 					}
 
@@ -255,7 +264,7 @@ public class Board {
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int new_position = position - 16;
 		// non capture moves
-		if (onBoard(new_position) && board[new_position] == 0) {
+		if (onBoard(new_position) && this.board[new_position] == 0) {
 			if (new_position >= 0 && new_position <= 7) {
 				// handle pawn promotion
 				moves.add(new_position);
@@ -265,7 +274,7 @@ public class Board {
 				moves.add(new_position);
 				// two squares
 				new_position = position - 32;
-				if ((position >= 96 && position <= 103) && board[new_position] == 0) {
+				if ((position >= 96 && position <= 103) && this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
 			}
@@ -277,13 +286,13 @@ public class Board {
 			if (onBoard(new_position)) {
 				if (
 						(new_position >= 112 && new_position <= 119) &&
-						(board[new_position] >= 1 && board[new_position] <= 6)
+						(this.board[new_position] >= 1 && this.board[new_position] <= 6)
 						) {
 					// handle pawn promotion
 					moves.add(new_position);
 				}
 				else {
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
+					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
 					}
 					// add enpassant
@@ -300,12 +309,12 @@ public class Board {
 		for (int square = 0; square < 128; square++) {
 			if (onBoard(square)) {
 				if (this.colour) {
-					if (board[square] == 6) {
+					if (this.board[square] == 6) {
 						king_square = square;
 					}
 				}
 				else {
-					if (board[square] == 12) {
+					if (this.board[square] == 12) {
 						king_square = square;
 					}
 				}
@@ -319,19 +328,19 @@ public class Board {
 	public boolean isSquareAttacked(int position) {
 		// pawns
 		if (this.colour) {
-			if (onBoard(position + 15) && (board[position + 15] == 7)) {
+			if (onBoard(position + 15) && (this.board[position + 15] == 7)) {
 				return true;
 			}
 
-			if (onBoard(position + 17) && (board[position + 17] == 7)) {
+			if (onBoard(position + 17) && (this.board[position + 17] == 7)) {
 				return true;
 			}
 		}
 		else {
-			if (onBoard(position - 15) && (board[position - 15] == 1)) {
+			if (onBoard(position - 15) && (this.board[position - 15] == 1)) {
 				return true;
 			}
-			if (onBoard(position - 17) && (board[position - 17] == 1)) {
+			if (onBoard(position - 17) && (this.board[position - 17] == 1)) {
 				return true;
 			}	
 		}
@@ -341,7 +350,7 @@ public class Board {
 			int new_position = position + i;
 
 			if (onBoard(new_position)) {
-				int piece = board[new_position];
+				int piece = this.board[new_position];
 
 				if (!this.colour ? piece == 6 : piece == 12) {
 					return true;
@@ -354,15 +363,15 @@ public class Board {
 		for (int i : knight_offsets) {
 			int new_position = position + i;
 			if (onBoard(new_position)) {
-				int piece = board[new_position];
+				int piece = this.board[new_position];
 
 				if(this.colour) {
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
+					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						continue;
 					}
 				}
 				else {
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
+					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						continue;
 					}
 				}
@@ -377,7 +386,7 @@ public class Board {
 		for (int i : bishop_offsets) {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
-				int piece = board[new_position];
+				int piece = this.board[new_position];
 
 				if (!this.colour ? (piece == 3 || piece == 5) : (piece == 9 || piece == 11)) {
 					return true;
@@ -395,21 +404,14 @@ public class Board {
 		for (int i : rook_offsets) {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
-				int piece = board[new_position];
+				int piece = this.board[new_position];
 
 				if (!this.colour ? (piece == 4 || piece == 5) : (piece == 10 || piece == 11)) {
 					return true;
 				}
 
-				if(this.colour) {
-					if (board[new_position] >= 7 && board[new_position] <= 12) {
-						break;
-					}
-				}
-				else {
-					if (board[new_position] >= 1 && board[new_position] <= 6) {
-						break;
-					}
+				if (piece != 0) {
+					break;
 				}
 
 				new_position += i;
@@ -474,7 +476,7 @@ public class Board {
 							moves.add(move);
 						}
 					}
-					
+
 				} 
 				// Black
 				else {
@@ -526,7 +528,7 @@ public class Board {
 							moves.add(move);
 						}
 					}
-					
+
 				}
 
 
@@ -564,6 +566,29 @@ public class Board {
 		return moves;
 	}
 
+	public boolean isLegal(Move move) {
+		if(this.colour) {
+			if (board[move.from] == 6) {
+				Board boardCopy = new Board(this);
+				boardCopy.makeMove(move);
+				return !boardCopy.isCheck();
+			}
+		}
+		else {
+			if (board[move.from] == 12) {
+				Board boardCopy = new Board(this);
+				boardCopy.makeMove(move);
+				return !boardCopy.isCheck();
+			}
+		}
+		return false;
+	}
+
+	public void makeMove(Move move) {
+		this.board[move.to] = this.board[move.from];
+		this.board[move.from] = 0;
+	}
+
 
 	// return if position is on the board
 	public  boolean onBoard(int position) {
@@ -571,14 +596,6 @@ public class Board {
 	}
 
 
-
-
-
-
-	public boolean makeMove() {
-		//
-		return true;
-	}
 
 
 }

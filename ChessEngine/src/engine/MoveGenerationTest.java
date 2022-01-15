@@ -284,11 +284,23 @@ public class MoveGenerationTest {
 		Board board = new Board();
 		
 		// Place a black queen
-		board.board[20] = 11;
+		board.board[52] = 11;
+		board.board[20] = 0;
 		
 		boolean check = board.isCheck();
 		assertTrue(check);
 	}
 	
+	@Test
+	public void isLegal() {		
+		Board board = new Board();
+		// Place an empty square
+		board.board[19] = 0;
+		// Place a black queen
+		board.board[51] = 11;
+		Move move = new Move(4, 19);
+		boolean check = board.isLegal(move);
+		assertFalse(check);
+	}
 
 }
