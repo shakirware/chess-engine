@@ -9,8 +9,8 @@ package engine;
  */
 public class Move {
 
-	private int from;
-	private int to;
+	public int from;
+	public int to;
 	
 	public Move( int from, int to) {
 		this.from = from;

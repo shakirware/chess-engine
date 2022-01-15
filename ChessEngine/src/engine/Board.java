@@ -540,30 +540,16 @@ public class Board {
 
 
 	public ArrayList<Move> getLegalMoves() {
-		ArrayList<Move> moves = new ArrayList<Move>();
-
-		for (int square = 0; square < 128; square++) {
-			if (onBoard(square)) {
-
-				// if king in check
-				if (isCheck()) {
-					// you can only move king
-				}
-				else {
-
-
-
-				}
-
-
+		ArrayList<Move> legal_moves = new ArrayList<Move>();
+		
+		ArrayList<Move> moves = this.getMoves();
+		
+		for (Move move : moves) {
+			if (isLegal(move)) {
+				legal_moves.add(move);
 			}
-
 		}
-
-
-
-
-		return moves;
+		return legal_moves;
 	}
 
 	public boolean isLegal(Move move) {
