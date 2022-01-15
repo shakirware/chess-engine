@@ -32,7 +32,7 @@ public class Board {
 				BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
 				BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY 
 		};
-		this.board = boardTest1;
+		//this.board = boardTest1;
 		this.colour = WHITE;
 	}
 
@@ -594,6 +594,7 @@ public class Board {
 		this.board[move.to] = this.board[move.from];
 		this.board[move.from] = 0;
 		this.turn = !this.turn;
+		this.colour = !this.colour;
 	}
 
 
