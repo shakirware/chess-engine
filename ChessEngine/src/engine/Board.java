@@ -5,6 +5,7 @@ package engine;
 
 import static engine.Pieces.*;
 
+
 import java.util.ArrayList;
 
 
@@ -292,10 +293,10 @@ public class Board {
 		return moves;
 	}
 
-	
+
 	public boolean isCheck() {
 		int king_square = 0;
-		
+
 		for (int square = 0; square < 128; square++) {
 			if (onBoard(square)) {
 				if (this.colour) {
@@ -312,9 +313,9 @@ public class Board {
 		}
 		return isSquareAttacked(king_square);
 	}
-	
-	
-	
+
+
+
 	public boolean isSquareAttacked(int position) {
 		// pawns
 		if (this.colour) {
@@ -354,7 +355,7 @@ public class Board {
 			int new_position = position + i;
 			if (onBoard(new_position)) {
 				int piece = board[new_position];
-				
+
 				if(this.colour) {
 					if (board[new_position] >= 1 && board[new_position] <= 6) {
 						continue;
@@ -365,7 +366,7 @@ public class Board {
 						continue;
 					}
 				}
-				
+
 				if (this.colour ? piece == 2 : piece == 8) {
 					return true;
 				}
@@ -377,11 +378,11 @@ public class Board {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
 				int piece = board[new_position];
-				
+
 				if (!this.colour ? (piece == 3 || piece == 5) : (piece == 9 || piece == 11)) {
 					return true;
 				}
-				
+
 				if (piece != 0) {
 					break;
 				}
@@ -395,11 +396,11 @@ public class Board {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
 				int piece = board[new_position];
-				
+
 				if (!this.colour ? (piece == 4 || piece == 5) : (piece == 10 || piece == 11)) {
 					return true;
 				}
-				
+
 				if(this.colour) {
 					if (board[new_position] >= 7 && board[new_position] <= 12) {
 						break;
@@ -417,11 +418,155 @@ public class Board {
 		return false;
 	}
 
+	// add castling
+	public ArrayList<Move> getMoves() {
+		ArrayList<Move> moves = new ArrayList<Move>();
 
+		for (int square = 0; square < 128; square++) {
+			if (onBoard(square)) {
+				// White
+				if (colour) {
+					// White Pawn
+					if (board[square] == 1) {
+						ArrayList<Integer> destinations = this.getWhitePawnMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					// White Knight
+					if (board[square] == 2) {
+						ArrayList<Integer> destinations = this.getKnightMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					// White Bishop
+					if (board[square] == 3) {
+						ArrayList<Integer> destinations = this.getBishopMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					// White Rook
+					if (board[square] == 4) {
+						ArrayList<Integer> destinations = this.getRookMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					// White Queen
+					if (board[square] == 5) {
+						ArrayList<Integer> destinations = this.getQueenMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					// White King
+					if (board[square] == 6) {
+						ArrayList<Integer> destinations = this.getKingMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					
+				} 
+				// Black
+				else {
+					// Black Pawn
+					if (board[square] == 7) {
+						ArrayList<Integer> destinations = this.getBlackPawnMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					// Black Knight
+					if (board[square] == 8) {
+						ArrayList<Integer> destinations = this.getKnightMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					// Black Bishop
+					if (board[square] == 9) {
+						ArrayList<Integer> destinations = this.getBishopMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					// Black Rook
+					if (board[square] == 10) {
+						ArrayList<Integer> destinations = this.getRookMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					// Black Queen
+					if (board[square] == 11) {
+						ArrayList<Integer> destinations = this.getQueenMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					// Black King
+					if (board[square] == 12) {
+						ArrayList<Integer> destinations = this.getKingMoves(square);
+						for (int destination : destinations) {
+							Move move = new Move(square, destination);
+							moves.add(move);
+						}
+					}
+					
+				}
+
+
+			}
+
+		}
+		return moves;
+	}
+
+
+	public ArrayList<Move> getLegalMoves() {
+		ArrayList<Move> moves = new ArrayList<Move>();
+
+		for (int square = 0; square < 128; square++) {
+			if (onBoard(square)) {
+
+				// if king in check
+				if (isCheck()) {
+					// you can only move king
+				}
+				else {
+
+
+
+				}
+
+
+			}
+
+		}
+
+
+
+
+		return moves;
+	}
 
 
 	// return if position is on the board
-	public static boolean onBoard(int position) {
+	public  boolean onBoard(int position) {
 		return (position & 0x88) == 0;
 	}
 

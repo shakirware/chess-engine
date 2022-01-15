@@ -18,7 +18,8 @@ public class Move {
 	}
 	
 	public void output() {
-		System.out.println(this.from + this.to);
+		System.out.println("FROM: " + this.from + "    " + "TO: "+ this.to);
+		
 	}
 
 }
