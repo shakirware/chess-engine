@@ -19,6 +19,7 @@ public class Board {
 
 	public int[] board;
 	public boolean colour;
+	public boolean turn = WHITE;
 
 	public Board() {
 		this.board = new int[] { 
@@ -31,6 +32,7 @@ public class Board {
 				BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
 				BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY 
 		};
+		this.board = boardTest1;
 		this.colour = WHITE;
 	}
 
@@ -557,6 +559,16 @@ public class Board {
 		return (moves.size() == 0 && this.isCheck());
 	}
 	
+	public boolean toCheckmate() {
+		this.colour = !this.colour;
+		ArrayList<Move> moves = this.getLegalMoves();
+		if (moves.size() == 0 && this.isCheck()) {
+			this.colour = !this.colour;
+			return true;
+		}
+		return false;
+	}
+	
 	public boolean isStalemate() {
 		ArrayList<Move> moves = this.getLegalMoves();
 		return (moves.size() == 0 && !this.isCheck());
@@ -581,6 +593,7 @@ public class Board {
 	public void makeMove(Move move) {
 		this.board[move.to] = this.board[move.from];
 		this.board[move.from] = 0;
+		this.turn = !this.turn;
 	}
 
 

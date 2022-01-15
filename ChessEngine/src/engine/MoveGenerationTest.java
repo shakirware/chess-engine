@@ -331,8 +331,9 @@ public class MoveGenerationTest {
 		board.board[5] = 0;
 		board.board[6] = 0;
 		
+		board.colour = false;
 		
-		boolean check = board.isCheckmate();
+		boolean check = board.toCheckmate();
 		
 		
 		assertTrue(check);
