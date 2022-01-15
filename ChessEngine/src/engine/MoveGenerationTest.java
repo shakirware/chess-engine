@@ -292,51 +292,67 @@ public class MoveGenerationTest {
 	}
 	
 	@Test
+	public void testLegalMoves() {		
+		Board board = new Board();
+		// set a black queen
+		board.board[20] = 11;
+		// set a black bishop
+		board.board[35] = 9;
+		// set a white king
+		board.board[4] = 6;
+		// set an empty square
+		board.board[18] = 0;
+		
+		Move move1 = new Move(4, 20);
+		boolean check = board.isLegal(move1);
+		assertFalse(check);
+	}
+	
+	@Test
 	public void testisLegal() {		
 		Board board = new Board();
 		// Place an empty square
 		board.board[19] = 0;
 		// Place a black queen
 		board.board[51] = 11;
+		
+		board.board[4] = 6;
+		
 		Move move = new Move(4, 19);
 		boolean check = board.isLegal(move);
 		assertFalse(check);
 	}
 	
-	@Test
-	public void testLegalMoves() {		
-		Board board = new Board();
-		board.board[20] = 11;
-
-		board.board[35] = 7;
-
-		board.board[18] = 0;
-		
-		Move move1 = new Move(5, 20);
-		boolean check = board.isLegal(move1);
-		
-		
-		assertTrue(check);
-	}
 	
 	@Test
 	public void testCheckmate() {		
 		Board board = new Board();
 		
+		// place a black queen
 		board.board[20] = 11;
 
-		board.board[35] = 7;
+		// place a black bishop
+		board.board[35] = 9;
 
+		board.board[4] = 6;
+		
+		board.board[1] = 0;
+		board.board[6] = 0;
 		board.board[3] = 0;
 		board.board[5] = 0;
-		board.board[6] = 0;
-		
-		board.colour = false;
-		
-		boolean check = board.toCheckmate();
+		board.board[2] = 0;
 		
 		
-		assertTrue(check);
+		Move move = new Move(4, 20);
+		
+		
+		boolean check = board.isLegal(move);
+		//System.out.println(check);
+		//System.out.println(board.isSquareAttacked(20));
+		//boolean check = board.isCheckmate();
+		
+		
+		//assertTrue(check);
 	}
 
 }

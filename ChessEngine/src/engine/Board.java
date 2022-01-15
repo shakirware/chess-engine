@@ -20,6 +20,8 @@ public class Board {
 	public int[] board;
 	public boolean colour;
 	public boolean turn = WHITE;
+	public int king_square_white = 4;
+	public int king_square_black = 116;
 
 	public Board() {
 		this.board = new int[] { 
@@ -305,27 +307,6 @@ public class Board {
 	}
 
 
-	public boolean isCheck() {
-		int king_square = 0;
-
-		for (int square = 0; square < 128; square++) {
-			if (onBoard(square)) {
-				if (this.colour) {
-					if (this.board[square] == 6) {
-						king_square = square;
-					}
-				}
-				else {
-					if (this.board[square] == 12) {
-						king_square = square;
-					}
-				}
-			}
-		}
-		return isSquareAttacked(king_square);
-	}
-
-
 
 	public boolean isSquareAttacked(int position) {
 		// pawns
@@ -540,12 +521,31 @@ public class Board {
 		return moves;
 	}
 
+	public boolean isCheck() {
+		int king_square = 0;
+
+		for (int square = 0; square < 128; square++) {
+			if (onBoard(square)) {
+				if (this.colour) {
+					if (this.board[square] == 6) {
+						king_square = square;
+					}
+				}
+				else {
+					if (this.board[square] == 12) {
+						king_square = square;
+					}
+				}
+			}
+		}
+		return isSquareAttacked(king_square);
+	}
 
 	public ArrayList<Move> getLegalMoves() {
 		ArrayList<Move> legal_moves = new ArrayList<Move>();
-		
+
 		ArrayList<Move> moves = this.getMoves();
-		
+
 		for (Move move : moves) {
 			if (isLegal(move)) {
 				legal_moves.add(move);
@@ -556,9 +556,9 @@ public class Board {
 
 	public boolean isCheckmate() {
 		ArrayList<Move> moves = this.getLegalMoves();
-		return (moves.size() == 0 && this.isCheck());
+		return (moves.size() == 0 && this.inCheck(this.colour));
 	}
-	
+
 	public boolean toCheckmate() {
 		this.colour = !this.colour;
 		ArrayList<Move> moves = this.getLegalMoves();
@@ -568,33 +568,48 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	public boolean isStalemate() {
 		ArrayList<Move> moves = this.getLegalMoves();
 		return (moves.size() == 0 && !this.isCheck());
 	}
 	
+	public boolean inCheck(boolean colour) {
+		return colour ? this.isSquareAttacked(this.king_square_white) : this.isSquareAttacked(king_square_black);
+	}
+
 	public boolean isLegal(Move move) {
-		if(this.colour) {
-				Board boardCopy = new Board(this);
-				boardCopy.makeMove(move);
-				return !boardCopy.isCheck();
-		
+		if (move.from == this.king_square_black || move.from == this.king_square_white) {
+			if (this.isSquareAttacked(move.to)) {
+				return false;
+			}
 		}
-		else {
-			
-				Board boardCopy = new Board(this);
-				boardCopy.makeMove(move);
-				return !boardCopy.isCheck();
-			
-		}
+		return true;
+		/*
+		Board boardCopy = new Board(this);
+		boardCopy.makeMove(move);
+		boolean legal = boardCopy.inCheck(!boardCopy.colour);
+		move.output();
+		System.out.println(legal);
+		return !legal;
+		*/
 	}
 
 	public void makeMove(Move move) {
+		
+		if (this.board[move.from] == 6) {
+			this.king_square_white = move.to;
+		}
+		
+		if (this.board[move.from] == 12) {
+			this.king_square_black = move.to;
+		}
+		
 		this.board[move.to] = this.board[move.from];
 		this.board[move.from] = 0;
-		this.turn = !this.turn;
 		this.colour = !this.colour;
+		
+		
 	}
 
 

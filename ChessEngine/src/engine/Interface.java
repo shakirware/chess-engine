@@ -316,6 +316,7 @@ public class Interface {
 			ArrayList<Move> moves = this.board.getLegalMoves();
 			Move move1 = new Move(from, to);
 			for (Move move : moves) {
+				move.output();
 				if (move.equals(move1)) {
 					//move.output();
 
@@ -323,6 +324,7 @@ public class Interface {
 					this.board.makeMove(move1);
 					//System.out.print(this.board.colour);
 
+					
 					Move ai_move = search.miniMax();
 					ai_move.output();
 					int[] from = convert0x64(ai_move.from);
