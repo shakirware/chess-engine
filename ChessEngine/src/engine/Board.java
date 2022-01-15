@@ -552,22 +552,30 @@ public class Board {
 		return legal_moves;
 	}
 
+	public boolean isCheckmate() {
+		ArrayList<Move> moves = this.getLegalMoves();
+		return (moves.size() == 0 && this.isCheck());
+	}
+	
+	public boolean isStalemate() {
+		ArrayList<Move> moves = this.getLegalMoves();
+		return (moves.size() == 0 && !this.isCheck());
+	}
+	
 	public boolean isLegal(Move move) {
 		if(this.colour) {
-			if (board[move.from] == 6) {
 				Board boardCopy = new Board(this);
 				boardCopy.makeMove(move);
 				return !boardCopy.isCheck();
-			}
+		
 		}
 		else {
-			if (board[move.from] == 12) {
+			
 				Board boardCopy = new Board(this);
 				boardCopy.makeMove(move);
 				return !boardCopy.isCheck();
-			}
+			
 		}
-		return false;
 	}
 
 	public void makeMove(Move move) {

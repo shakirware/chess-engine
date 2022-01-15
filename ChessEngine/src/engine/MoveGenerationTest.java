@@ -292,7 +292,7 @@ public class MoveGenerationTest {
 	}
 	
 	@Test
-	public void isLegal() {		
+	public void testisLegal() {		
 		Board board = new Board();
 		// Place an empty square
 		board.board[19] = 0;
@@ -301,6 +301,41 @@ public class MoveGenerationTest {
 		Move move = new Move(4, 19);
 		boolean check = board.isLegal(move);
 		assertFalse(check);
+	}
+	
+	@Test
+	public void testLegalMoves() {		
+		Board board = new Board();
+		board.board[20] = 11;
+
+		board.board[35] = 7;
+
+		board.board[18] = 0;
+		
+		Move move1 = new Move(5, 20);
+		boolean check = board.isLegal(move1);
+		
+		
+		assertTrue(check);
+	}
+	
+	@Test
+	public void testCheckmate() {		
+		Board board = new Board();
+		
+		board.board[20] = 11;
+
+		board.board[35] = 7;
+
+		board.board[3] = 0;
+		board.board[5] = 0;
+		board.board[6] = 0;
+		
+		
+		boolean check = board.isCheckmate();
+		
+		
+		assertTrue(check);
 	}
 
 }
