@@ -3,7 +3,6 @@
  */
 package engine;
 
-import static engine.Pieces.*;
 
 /**
  * @author shakir

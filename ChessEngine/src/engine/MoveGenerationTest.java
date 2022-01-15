@@ -272,9 +272,10 @@ public class MoveGenerationTest {
 		
 		// Place a black queen
 		//board.board[51] = 11;
-		//System.out.println(board.getQueenMoves(51));
-		System.out.println(board.getRookMoves(112));
-		boolean result = board.isSquareAttacked(32);
+		//System.out.println(board.getBishopMoves(3));
+		//System.out.println(board.getRookMoves(119));
+		board.colour = true;
+		boolean result = board.isSquareAttacked(80);
 		assertTrue(result);
 	}
 	
