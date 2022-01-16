@@ -346,13 +346,13 @@ public class MoveGenerationTest {
 		Move move = new Move(4, 20);
 		
 		
-		boolean check = board.isLegal(move);
+		//boolean check = board.isLegal(move);
 		//System.out.println(check);
 		//System.out.println(board.isSquareAttacked(20));
-		//boolean check = board.isCheckmate();
+		boolean check = board.isCheckmate();
 		
 		
-		//assertTrue(check);
+		assertTrue(check);
 	}
 
 }

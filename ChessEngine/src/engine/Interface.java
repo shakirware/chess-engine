@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  * @author shakir
@@ -312,11 +313,14 @@ public class Interface {
 		{
 			to = convert0x88(y, x);
 			//int index = convert0x88(y, x);
-
+			if (board.isCheckmate()) {
+				showMessageDialog(null, "Checkmate sir!");
+				return;
+			}
 			ArrayList<Move> moves = this.board.getLegalMoves();
 			Move move1 = new Move(from, to);
 			for (Move move : moves) {
-				move.output();
+				//move.output();
 				if (move.equals(move1)) {
 					//move.output();
 
@@ -326,12 +330,15 @@ public class Interface {
 
 					
 					Move ai_move = search.miniMax();
-					ai_move.output();
+					
+					if (ai_move == null) {
+						showMessageDialog(null, "Checkmate sir!");
+						return;
+					}
+					
+					//ai_move.output();
 					int[] from = convert0x64(ai_move.from);
 					
-					System.out.println(ai_move.from);
-					System.out.println(from[0]);
-					System.out.println(from[1]);
 					
 					
 					int[] to = convert0x64(ai_move.to);

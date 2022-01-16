@@ -556,6 +556,9 @@ public class Board {
 
 	public boolean isCheckmate() {
 		ArrayList<Move> moves = this.getLegalMoves();
+		//for (Move move: moves) {
+			//move.output();
+		//}
 		return (moves.size() == 0 && this.inCheck(this.colour));
 	}
 
@@ -584,12 +587,22 @@ public class Board {
 				return false;
 			}
 		}
+			
+		if (inCheck(this.colour)) {
+			Board boardCopy = new Board(this);
+			boardCopy.makeMove(move);
+			boolean check = boardCopy.inCheck(this.colour);
+			// if were still in check after another move then thats not allowed. so if check is true then its an illegal move and if check is false then its a legal move
+			return !check;
+			}
+		
+			
 		return true;
 		/*
 		Board boardCopy = new Board(this);
 		boardCopy.makeMove(move);
 		boolean legal = boardCopy.inCheck(!boardCopy.colour);
-		move.output();
+		move();
 		System.out.println(legal);
 		return !legal;
 		*/
