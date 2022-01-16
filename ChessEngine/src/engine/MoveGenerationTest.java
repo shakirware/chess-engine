@@ -287,7 +287,7 @@ public class MoveGenerationTest {
 		board.board[52] = 11;
 		board.board[20] = 0;
 		
-		boolean check = board.isCheck();
+		boolean check = board.inCheck(board.colour);
 		assertTrue(check);
 	}
 	
@@ -349,10 +349,27 @@ public class MoveGenerationTest {
 		//boolean check = board.isLegal(move);
 		//System.out.println(check);
 		//System.out.println(board.isSquareAttacked(20));
-		boolean check = board.isCheckmate();
+		boolean check = board.isCheckmate(board.colour);
 		
 		
 		assertTrue(check);
+	}
+	
+	@Test
+	public void testCheckmate1() {		
+		Board board = new Board();
+		
+		//boolean check = board.isLegal(move);
+		//System.out.println(board.inCheck(!board.colour));
+		//System.out.println(board.isSquareAttacked(20));
+		ArrayList<Move> moves = board.getLegalMoves(!board.colour);
+		
+		for (Move move : moves) {
+			//move.output();
+		}
+		
+		
+		//assertTrue(check);
 	}
 
 }

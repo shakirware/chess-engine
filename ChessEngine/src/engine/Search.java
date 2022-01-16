@@ -20,7 +20,7 @@ public class Search {
 	public Move miniMax() {
 		Move bestmove = null;
 		for (int depth = 1; depth < max_depth; depth++) {
-			ArrayList<Move> moves = this.board.getLegalMoves();
+			ArrayList<Move> moves = this.board.getLegalMoves(false);
 			int currUtil = loseVal;
 			int bestUtil = loseVal;
 			this.temp_depth = depth;
@@ -33,11 +33,9 @@ public class Search {
 					//System.out.println(bestUtil);
 					if(bestUtil == winVal) {
 						bestmove = move;
-						//move.output();
 					}
 					if(this.temp_depth+1 == max_depth) {
 						bestmove = move;
-						//move.output();
 					}
 				}
 			}
@@ -47,13 +45,13 @@ public class Search {
 	
 	public int min(Board board, int depth) {
 		if (depth > this.temp_depth) {
-			return getScore(board);
+			return getScore(board, true);
 		}
 		int min = winVal;
 		int curr;
-		ArrayList<Move> moves = board.getLegalMoves();
+		ArrayList<Move> moves = board.getLegalMoves(true);
 		for(Move move: moves) {
-			Board boardCopy = new Board(this.board);
+			Board boardCopy = new Board(board);
 			boardCopy.makeMove(move);
 			curr = max(boardCopy, depth + 1);
 			if (curr < min) {
@@ -65,13 +63,13 @@ public class Search {
 	
 	public int max(Board board, int depth) {
 		if (depth > this.temp_depth) {
-			return getScore(board);
+			return getScore(board, false);
 		}
 		int max = loseVal;
 		int curr;
-		ArrayList<Move> moves = board.getLegalMoves();
+		ArrayList<Move> moves = board.getLegalMoves(false);
 		for(Move move: moves) {
-			Board boardCopy = new Board(this.board);
+			Board boardCopy = new Board(board);
 			boardCopy.makeMove(move);
 			curr = min(boardCopy, depth);
 			if (curr > max) {
@@ -81,21 +79,21 @@ public class Search {
 		return max;
 	}
 	
-	public int getScore(Board board) {
+	public int getScore(Board board, boolean colour) {
 		// check mate for player
-		if (board.isCheckmate()) {
+		if (board.isCheckmate(!colour)) {
 			return loseVal;
 		}
-		if (board.toCheckmate()) {
+		if (board.isCheckmate(colour)) {
 			return winVal;
 		}
 		else {
-			return getMaterial(board);
+			return getMaterial(board, colour);
 		}
 	}
 	
 	
-	public int getMaterial(Board board) {
+	public int getMaterial(Board board, boolean colour) {
 		int score = 0;
 		for (int square = 0; square < 128; square++)
 		{
@@ -109,6 +107,6 @@ public class Search {
 				}
 			}
 		}
-		return board.colour ? score : -score;
+		return colour ? score : -score;
 	}
 }

@@ -313,11 +313,11 @@ public class Interface {
 		{
 			to = convert0x88(y, x);
 			//int index = convert0x88(y, x);
-			if (board.isCheckmate()) {
+			if (board.isCheckmate(this.board.colour)) {
 				showMessageDialog(null, "Checkmate sir!");
 				return;
 			}
-			ArrayList<Move> moves = this.board.getLegalMoves();
+			ArrayList<Move> moves = this.board.getLegalMoves(true);
 			Move move1 = new Move(from, to);
 			for (Move move : moves) {
 				//move.output();
@@ -331,10 +331,6 @@ public class Interface {
 					
 					Move ai_move = search.miniMax();
 					
-					if (ai_move == null) {
-						showMessageDialog(null, "Checkmate sir!");
-						return;
-					}
 					
 					//ai_move.output();
 					int[] from = convert0x64(ai_move.from);

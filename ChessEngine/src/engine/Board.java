@@ -34,7 +34,7 @@ public class Board {
 				BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
 				BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY 
 		};
-		//this.board = boardTest1;
+		//this.board = boardTest2;
 		this.colour = WHITE;
 	}
 
@@ -308,9 +308,9 @@ public class Board {
 
 
 
-	public boolean isSquareAttacked(int position) {
+	public boolean isSquareAttacked(int position, boolean colour) {
 		// pawns
-		if (this.colour) {
+		if (colour) {
 			if (onBoard(position + 15) && (this.board[position + 15] == 7)) {
 				return true;
 			}
@@ -335,7 +335,7 @@ public class Board {
 			if (onBoard(new_position)) {
 				int piece = this.board[new_position];
 
-				if (!this.colour ? piece == 6 : piece == 12) {
+				if (!colour ? piece == 6 : piece == 12) {
 					return true;
 				}
 
@@ -348,7 +348,7 @@ public class Board {
 			if (onBoard(new_position)) {
 				int piece = this.board[new_position];
 
-				if(this.colour) {
+				if(colour) {
 					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						continue;
 					}
@@ -359,7 +359,7 @@ public class Board {
 					}
 				}
 
-				if (this.colour ? piece == 2 : piece == 8) {
+				if (colour ? piece == 2 : piece == 8) {
 					return true;
 				}
 			}
@@ -371,7 +371,7 @@ public class Board {
 			while (onBoard(new_position)) {
 				int piece = this.board[new_position];
 
-				if (!this.colour ? (piece == 3 || piece == 5) : (piece == 9 || piece == 11)) {
+				if (!colour ? (piece == 3 || piece == 5) : (piece == 9 || piece == 11)) {
 					return true;
 				}
 
@@ -389,7 +389,7 @@ public class Board {
 			while (onBoard(new_position)) {
 				int piece = this.board[new_position];
 
-				if (!this.colour ? (piece == 4 || piece == 5) : (piece == 10 || piece == 11)) {
+				if (!colour ? (piece == 4 || piece == 5) : (piece == 10 || piece == 11)) {
 					return true;
 				}
 
@@ -404,7 +404,7 @@ public class Board {
 	}
 
 	// add castling
-	public ArrayList<Move> getMoves() {
+	public ArrayList<Move> getMoves(boolean colour) {
 		ArrayList<Move> moves = new ArrayList<Move>();
 
 		for (int square = 0; square < 128; square++) {
@@ -521,108 +521,66 @@ public class Board {
 		return moves;
 	}
 
-	public boolean isCheck() {
-		int king_square = 0;
-
-		for (int square = 0; square < 128; square++) {
-			if (onBoard(square)) {
-				if (this.colour) {
-					if (this.board[square] == 6) {
-						king_square = square;
-					}
-				}
-				else {
-					if (this.board[square] == 12) {
-						king_square = square;
-					}
-				}
-			}
-		}
-		return isSquareAttacked(king_square);
-	}
-
-	public ArrayList<Move> getLegalMoves() {
+	public ArrayList<Move> getLegalMoves(boolean colour) {
 		ArrayList<Move> legal_moves = new ArrayList<Move>();
 
-		ArrayList<Move> moves = this.getMoves();
+		ArrayList<Move> moves = this.getMoves(colour);
 
 		for (Move move : moves) {
-			if (isLegal(move)) {
+			if (isLegal(move, colour)) {
 				legal_moves.add(move);
 			}
 		}
 		return legal_moves;
 	}
 
-	public boolean isCheckmate() {
-		ArrayList<Move> moves = this.getLegalMoves();
-		//for (Move move: moves) {
-			//move.output();
-		//}
-		return (moves.size() == 0 && this.inCheck(this.colour));
+	public boolean isCheckmate(boolean colour) {
+		ArrayList<Move> moves = this.getLegalMoves(colour);
+		return (moves.size() == 0 && this.inCheck(colour));
 	}
 
-	public boolean toCheckmate() {
-		this.colour = !this.colour;
-		ArrayList<Move> moves = this.getLegalMoves();
-		if (moves.size() == 0 && this.isCheck()) {
-			this.colour = !this.colour;
-			return true;
-		}
-		return false;
+	public boolean isStalemate(boolean colour) {
+		ArrayList<Move> moves = this.getLegalMoves(colour);
+		return (moves.size() == 0 && !this.inCheck(colour));
 	}
 
-	public boolean isStalemate() {
-		ArrayList<Move> moves = this.getLegalMoves();
-		return (moves.size() == 0 && !this.isCheck());
-	}
-	
 	public boolean inCheck(boolean colour) {
-		return colour ? this.isSquareAttacked(this.king_square_white) : this.isSquareAttacked(king_square_black);
+		return colour ? this.isSquareAttacked(this.king_square_white, colour) : this.isSquareAttacked(king_square_black, colour);
 	}
 
-	public boolean isLegal(Move move) {
-		if (move.from == this.king_square_black || move.from == this.king_square_white) {
-			if (this.isSquareAttacked(move.to)) {
-				return false;
-			}
-		}
-			
-		if (inCheck(this.colour)) {
-			Board boardCopy = new Board(this);
-			boardCopy.makeMove(move);
-			boolean check = boardCopy.inCheck(this.colour);
-			// if were still in check after another move then thats not allowed. so if check is true then its an illegal move and if check is false then its a legal move
-			return !check;
-			}
-		
-			
-		return true;
-		/*
+
+
+	public boolean isLegal(Move move, boolean colour) {		
 		Board boardCopy = new Board(this);
-		boardCopy.makeMove(move);
-		boolean legal = boardCopy.inCheck(!boardCopy.colour);
-		move();
-		System.out.println(legal);
-		return !legal;
-		*/
+		int piece = boardCopy.board[move.from];
+		int dest = boardCopy.board[move.to];
+
+
+		boardCopy.board[move.to] = boardCopy.board[move.from];
+		boardCopy.board[move.from] = 0;
+		boolean check = boardCopy.inCheck(colour);
+
+		boardCopy.board[move.from] = piece;
+		boardCopy.board[move.to] = dest;
+
+		return !check;
 	}
 
 	public void makeMove(Move move) {
-		
+
 		if (this.board[move.from] == 6) {
 			this.king_square_white = move.to;
 		}
-		
+
 		if (this.board[move.from] == 12) {
 			this.king_square_black = move.to;
 		}
-		
+
 		this.board[move.to] = this.board[move.from];
 		this.board[move.from] = 0;
 		this.colour = !this.colour;
-		
-		
+
+
 	}
 
 
