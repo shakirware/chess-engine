@@ -323,7 +323,7 @@ public class MoveGenerationTest {
 	
 	
 	@Test
-	public void testCheckmate() {		
+	public void testCheckmateWhite() {		
 		Board board = new Board();
 		
 		// place a black queen
@@ -340,13 +340,6 @@ public class MoveGenerationTest {
 		board.board[5] = 0;
 		board.board[2] = 0;
 		
-		
-		Move move = new Move(4, 20);
-		
-		
-		//boolean check = board.isLegal(move);
-		//System.out.println(check);
-		//System.out.println(board.isSquareAttacked(20));
 		boolean check = board.isCheckmate(board.colour);
 		
 		
@@ -354,20 +347,39 @@ public class MoveGenerationTest {
 	}
 	
 	@Test
-	public void testCheckmate1() {		
+	public void testCheckmateBlack() {		
 		Board board = new Board();
 		
-		//boolean check = board.isLegal(move);
-		//System.out.println(board.inCheck(!board.colour));
-		//System.out.println(board.isSquareAttacked(20));
-		ArrayList<Move> moves = board.getLegalMoves(!board.colour);
+		// place a white queen
+		board.board[100] = 5;
+
+		// place a white bishop
+		board.board[83] = 3;
+
+		board.board[115] = 0;
+		board.board[99] = 0;
+		board.board[117] = 0;
+		board.board[101] = 0;
+		board.board[114] = 0;
+		board.board[118] = 0;
 		
-		for (Move move : moves) {
-			//move.output();
-		}
+		boolean check = board.inCheckmate();	
+		
+		assertTrue(check);
+	}
+	
+	@Test
+	public void boardCopyTest() {
+		Board board = new Board();
 		
 		
-		//assertTrue(check);
+		Board boardCopy = new Board(board);
+		boardCopy.board[20] = 11;
+		Move move = new Move(4, 20);
+		boardCopy.makeMove(move);
+		
+		
+		assertNotEquals(board.board[4],boardCopy.board[4]);
 	}
 
 }

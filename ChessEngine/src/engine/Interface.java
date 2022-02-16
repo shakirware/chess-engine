@@ -43,7 +43,7 @@ public class Interface {
 	public Interface() {
 		initializeGui();
 		this.board = new Board();
-		this.search = new Search(this.board, 3);
+		this.search = new Search(this.board, 2);
 	}
 
 	public final void initializeGui() {
@@ -303,6 +303,11 @@ public class Interface {
 
 	private void pressedButton(int x, int y) {
 		JButton button = (JButton)chessBoardSquares[x][y];
+		
+		if (this.board.inCheckmate())  {
+			showMessageDialog(null, "Checkmate sir!");
+			return;
+		}
 
 		if (pieceToMoveButton == null)   
 		{
@@ -313,10 +318,6 @@ public class Interface {
 		{
 			to = convert0x88(y, x);
 			//int index = convert0x88(y, x);
-			if (board.isCheckmate(this.board.colour)) {
-				showMessageDialog(null, "Checkmate sir!");
-				return;
-			}
 			ArrayList<Move> moves = this.board.getLegalMoves(true);
 			Move move1 = new Move(from, to);
 			for (Move move : moves) {
@@ -326,7 +327,12 @@ public class Interface {
 
 					this.makeMove(pieceToMoveButton, button);
 					this.board.makeMove(move1);
-					//System.out.print(this.board.colour);
+					
+					if (this.board.inCheckmate())  {
+						showMessageDialog(null, "Checkmate sir!");
+						return;
+					}
+					
 
 					
 					Move ai_move = search.miniMax();

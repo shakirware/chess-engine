@@ -7,6 +7,7 @@ import static engine.Pieces.*;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -19,7 +20,7 @@ public class Board {
 
 	public int[] board;
 	public boolean colour;
-	public boolean turn = WHITE;
+	//public boolean turn = WHITE;
 	public int king_square_white = 4;
 	public int king_square_black = 116;
 
@@ -39,14 +40,14 @@ public class Board {
 	}
 
 	public Board(Board board) {
-		this.board = board.getBoard();
+		this.board = Arrays.copyOf(board.board, board.board.length);
 		this.colour = board.colour;
 		this.king_square_white = board.king_square_white;
 		this.king_square_black = board.king_square_black;
 	}
 
 	public int[] getBoard() {
-		return this.board.clone();
+		return Arrays.copyOf(this.board, this.board.length);
 	}
 
 	public ArrayList<Integer> getKnightMoves(int position) {
@@ -525,7 +526,7 @@ public class Board {
 
 	public ArrayList<Move> getLegalMoves(boolean colour) {
 		ArrayList<Move> legal_moves = new ArrayList<Move>();
-
+					
 		ArrayList<Move> moves = this.getMoves(colour);
 
 		for (Move move : moves) {
@@ -536,6 +537,18 @@ public class Board {
 		return legal_moves;
 	}
 
+	public boolean inCheckmate() {
+		ArrayList<Move> movesWhite = this.getLegalMoves(true);
+		ArrayList<Move> movesBlack = this.getLegalMoves(false);
+		if (movesWhite.size() == 0 && this.inCheck(true)) {
+			return true;
+		} 
+		if ((movesBlack.size() == 0 && this.inCheck(false))) {
+			return true;
+		}
+		return false;
+	}
+	
 	public boolean isCheckmate(boolean colour) {
 		ArrayList<Move> moves = this.getLegalMoves(colour);
 		return (moves.size() == 0 && this.inCheck(colour));

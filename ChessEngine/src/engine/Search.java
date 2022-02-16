@@ -19,7 +19,7 @@ public class Search {
 
 	public Move miniMax() {
 		Move bestmove = null;
-		for (int depth = 1; depth < max_depth; depth++) {
+		for (int depth = 1; depth < this.max_depth; depth++) {
 			ArrayList<Move> moves = this.board.getLegalMoves(false);
 			int currUtil = loseVal;
 			int bestUtil = loseVal;
@@ -27,14 +27,14 @@ public class Search {
 			for(Move move: moves) {
 				Board boardCopy = new Board(this.board);
 				boardCopy.makeMove(move);
-				currUtil = min(boardCopy, depth);
+				currUtil = min(boardCopy, 1);
 				if (bestUtil <= currUtil) {
 					bestUtil = currUtil;
-					//System.out.println(bestUtil);
+					bestmove = move;
 					if(bestUtil == winVal) {
 						bestmove = move;
 					}
-					if(this.temp_depth+1 == max_depth) {
+					if(depth+1 == this.max_depth) {
 						bestmove = move;
 					}
 				}
@@ -71,7 +71,7 @@ public class Search {
 		for(Move move: moves) {
 			Board boardCopy = new Board(board);
 			boardCopy.makeMove(move);
-			curr = min(boardCopy, depth);
+			curr = min(boardCopy, depth + 1);
 			if (curr > max) {
 				max = curr;
 			}
