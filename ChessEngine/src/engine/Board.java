@@ -40,7 +40,9 @@ public class Board {
 
 	public Board(Board board) {
 		this.board = board.getBoard();
-		this.colour = WHITE;
+		this.colour = board.colour;
+		this.king_square_white = board.king_square_white;
+		this.king_square_black = board.king_square_black;
 	}
 
 	public int[] getBoard() {
@@ -552,17 +554,8 @@ public class Board {
 
 	public boolean isLegal(Move move, boolean colour) {		
 		Board boardCopy = new Board(this);
-		int piece = boardCopy.board[move.from];
-		int dest = boardCopy.board[move.to];
-
-
-		boardCopy.board[move.to] = boardCopy.board[move.from];
-		boardCopy.board[move.from] = 0;
+		boardCopy.makeMove(move);
 		boolean check = boardCopy.inCheck(colour);
-
-		boardCopy.board[move.from] = piece;
-		boardCopy.board[move.to] = dest;
-
 		return !check;
 	}
 

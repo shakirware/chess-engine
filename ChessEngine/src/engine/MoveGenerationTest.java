@@ -271,11 +271,10 @@ public class MoveGenerationTest {
 		Board board = new Board();
 		
 		// Place a black queen
-		//board.board[51] = 11;
-		//System.out.println(board.getBishopMoves(3));
-		//System.out.println(board.getRookMoves(119));
-		board.colour = true;
-		boolean result = board.isSquareAttacked(80);
+		board.board[51] = 11;
+		
+		
+		boolean result = board.isSquareAttacked(67, true);
 		assertTrue(result);
 	}
 	
@@ -294,33 +293,32 @@ public class MoveGenerationTest {
 	@Test
 	public void testLegalMoves() {		
 		Board board = new Board();
+		
 		// set a black queen
 		board.board[20] = 11;
 		// set a black bishop
 		board.board[35] = 9;
 		// set a white king
 		board.board[4] = 6;
-		// set an empty square
-		board.board[18] = 0;
 		
+		// king cannot take queen due to bishop protecting queen
 		Move move1 = new Move(4, 20);
-		boolean check = board.isLegal(move1);
+		boolean check = board.isLegal(move1, true);
 		assertFalse(check);
 	}
 	
 	@Test
 	public void testisLegal() {		
 		Board board = new Board();
-		// Place an empty square
-		board.board[19] = 0;
 		// Place a black queen
-		board.board[51] = 11;
-		
+		board.board[20] = 11;
+		// Place a white king
 		board.board[4] = 6;
 		
-		Move move = new Move(4, 19);
-		boolean check = board.isLegal(move);
-		assertFalse(check);
+		// king takes queen
+		Move move = new Move(4, 20);
+		boolean check = board.isLegal(move, true);
+		assertTrue(check);
 	}
 	
 	
