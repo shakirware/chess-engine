@@ -5,13 +5,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.Button;
-
+import javafx.scene.image.ImageView;
 
 import java.util.List;
 import java.util.ArrayList;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import static engine.Pieces.*;
 
 public class Controller implements Initializable {
 	
@@ -38,50 +39,82 @@ public class Controller implements Initializable {
 		start.setVisible(false);
 		for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
+            	int[] board = this.board.board;
+            	int square = convert0x88(i, j);
+            	int piece = board[square];
+            	
                 Pane pane = new Pane();
                 paneList.add(pane);
                 paneArray[i][j] = pane;
 
+ 
+                
                 String light = "-fx-background-color: #e8ceab;";
                 String dark = "-fx-background-color: #bc7944;";
-
-                if (i % 2 == 0) {
-                    if (j % 2 == 0) {
-                        pane.setStyle(light);
+                
+                if (piece != 0) {
+                	if (i % 2 == 0) {
+                        if (j % 2 == 0) {
+                            //light
+                            pane.setStyle(
+                            		light +
+                            		"-fx-background-image: url('" + pieceImages[piece] + "');" +
+                                    "-fx-background-size: 80 80;" +
+                                    "-fx-background-position: center;" 
+                                    );
+                            
+                            
+                        } else {
+                        	//dark
+                        	pane.setStyle(
+                            		dark +
+                            		"-fx-background-image: url('" + pieceImages[piece] + "');" +
+                                    "-fx-background-size: 80 80;" +
+                                    "-fx-background-position: center;" 
+                                    );
+                        }
                     } else {
-                        pane.setStyle(dark);
+                        if (j % 2 != 0) {
+                        	pane.setStyle(
+                            		light +
+                            		"-fx-background-image: url('" + pieceImages[piece] + "');" +
+                                    "-fx-background-size: 80 80;" +
+                                    "-fx-background-position: center;" 
+                                    );
+                        } else {
+                        	pane.setStyle(
+                            		dark +
+                            		"-fx-background-image: url('" + pieceImages[piece] + "');" +
+                                    "-fx-background-size: 80 80;" +
+                                    "-fx-background-position: center;" 
+                                    );
+                        }
                     }
                 } else {
-                    if (j % 2 != 0) {
-                        pane.setStyle(light);
+                	if (i % 2 == 0) {
+                        if (j % 2 == 0) {
+                            pane.setStyle(light);
+                        } else {
+                            pane.setStyle(dark);
+                        }
                     } else {
-                        pane.setStyle(dark);
+                        if (j % 2 != 0) {
+                            pane.setStyle(light);
+                        } else {
+                            pane.setStyle(dark);
+                        }
                     }
+                	
                 }
+                
+            
+                
                 grid.add(pane, j, i);
             }
         }
-		this.getPieces();
 	}
 	
-	public void getPieces() {
-		int[] board = this.board.board;
-		
-		for (int rank = 0; rank < 8; rank ++) {
-			for (int file = 0; file < 16; file++)
-			{
-				int square = rank * 16 + file;
-				if ((square & 0x88) == 0) {
-					if (board[square] != 0) {
-						int piece = board[square];
-						int[] c = convert0x64(square);
-						System.out.println("Piece: " + piece + " @ " + square + " / " + c[0] + "-" + c[1]);
-					}
-				}
-			}
-		}
-	}
-
+	
 	
 	
 	public int convert0x88(int y, int x) {

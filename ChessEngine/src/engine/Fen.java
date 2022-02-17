@@ -15,7 +15,7 @@ public class Fen {
 		int[] board = boardEmpty;
 		int count = 0;
 		
-		for (int rank = 0; rank < 8; rank ++) {
+		for (int rank = 7; rank >= 0; rank --) {
 			for (int file = 0; file < 16; file++)
 			{
 				int square = rank * 16 + file;

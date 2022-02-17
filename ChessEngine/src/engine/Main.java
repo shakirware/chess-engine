@@ -19,7 +19,7 @@ public class Main {
 		
 		
 		
-		int[] board = Fen.parseFenString("4k2r/6r1/8/8/8/8/3R4/R3K3");
+		int[] board = Fen.parseFenString("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R");
 		
 		for (int rank = 0; rank < 8; rank ++) {
 			for (int file = 0; file < 16; file++)

@@ -41,8 +41,23 @@ public class Pieces {
 	public static final int BQUEEN = 11;
 	public static final int BKING = 12;
 	
+	public static final String[] pieceImages = {
+			".",
+			"wP.png",
+			"wN.png",
+			"wB.png",
+			"wR.png",
+			"wQ.png",
+			"wK.png",
+			"bP.png",
+			"bN.png",
+			"bB.png",
+			"bR.png",
+			"bQ.png",
+			"bK.png"
+	};
 	
-	public static final String pieces = ".pnbrqkPNBRQK";
+	public static final String pieces = ".PNBRQKpnbrqk";
 	
 	public static final int[] boardEmpty = new int[] { 
 			EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,

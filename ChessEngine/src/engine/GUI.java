@@ -11,7 +11,7 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-       Parent root = FXMLLoader.load(getClass().getResource("resources/Board.fxml"));
+       Parent root = FXMLLoader.load(getClass().getResource("Board.fxml"));
         Scene scene = new Scene(root, 600, 600);
         stage.setTitle("Chess Engine");
         stage.setScene(scene);
