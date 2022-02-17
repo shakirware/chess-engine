@@ -5,38 +5,35 @@ package engine;
 
 import static engine.Pieces.*;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
 
 /**
  * @author shakir
  *
  */
 
-
 public class Board {
 
 	public int[] board;
 	public boolean colour;
-	//public boolean turn = WHITE;
+	// public boolean turn = WHITE;
 	public int king_square_white = 4;
 	public int king_square_black = 116;
 
 	public Board() {
-		this.board = new int[] { 
-				WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-				WPAWN,  WPAWN,  WPAWN,  WPAWN,  WPAWN,  WPAWN,  WPAWN,  WPAWN,   EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-				BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-				BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY 
-		};
-		//this.board = boardTest2;
-		this.board = Fen.parseFenString("r2kr3/pppQ2pp/8/4Np1q/8/2PB4/P4PPP/R3R1K1");
+		this.board = new int[] { WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK, EMPTY, EMPTY, EMPTY,
+				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, EMPTY, EMPTY,
+				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN,
+				BPAWN, BPAWN, BPAWN, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, BROOK, BKNIGHT, BBISHOP,
+				BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY };
+		// this.board = boardTest2;
+		this.board = Fen.parseFenString("4Q1k1/Bpp2ppp/8/5b2/8/8/Pq1n1PPP/5RK1");
+		this.getKingSquares();
 		this.colour = WHITE;
 	}
 
@@ -52,7 +49,7 @@ public class Board {
 	}
 
 	public ArrayList<Integer> getKnightMoves(int position) {
-		int knight_offsets[] = {33, 31, 18, 14, -33, -31, -18, -14};
+		int knight_offsets[] = { 33, 31, 18, 14, -33, -31, -18, -14 };
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		for (int i : knight_offsets) {
 			int new_position = position + i;
@@ -76,12 +73,12 @@ public class Board {
 					moves.add(new_position);
 				}
 			}
-		}			
+		}
 		return moves;
 	}
 
 	public ArrayList<Integer> getKingMoves(int position) {
-		int king_offsets[] = {16, -16, 1, -1, 15, 17, -15, -17};
+		int king_offsets[] = { 16, -16, 1, -1, 15, 17, -15, -17 };
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		for (int i : king_offsets) {
 			int new_position = position + i;
@@ -104,14 +101,13 @@ public class Board {
 				if (this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
-			}			
+			}
 		}
 		return moves;
 	}
 
-
 	public ArrayList<Integer> getBishopMoves(int position) {
-		int bishop_offsets[] = {15, 17, -15, -17};
+		int bishop_offsets[] = { 15, 17, -15, -17 };
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		for (int i : bishop_offsets) {
 			int new_position = position + i;
@@ -145,12 +141,12 @@ public class Board {
 				}
 				new_position += i;
 			}
-		}			
+		}
 		return moves;
 	}
 
 	public ArrayList<Integer> getQueenMoves(int position) {
-		int queen_offsets[] = {16, -16, 1, -1, 15, 17, -15, -17};
+		int queen_offsets[] = { 16, -16, 1, -1, 15, 17, -15, -17 };
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		for (int i : queen_offsets) {
 			int new_position = position + i;
@@ -182,13 +178,13 @@ public class Board {
 					moves.add(new_position);
 				}
 				new_position += i;
-			}			
+			}
 		}
 		return moves;
 	}
 
 	public ArrayList<Integer> getRookMoves(int position) {
-		int rook_offsets[] = {16, -16, 1, -1};
+		int rook_offsets[] = { 16, -16, 1, -1 };
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		for (int i : rook_offsets) {
 			int new_position = position + i;
@@ -220,7 +216,7 @@ public class Board {
 				}
 				new_position += i;
 			}
-		}			
+		}
 		return moves;
 	}
 
@@ -232,8 +228,7 @@ public class Board {
 			if (new_position >= 0 && new_position <= 7) {
 				// handle pawn promotion
 				moves.add(new_position);
-			}
-			else {
+			} else {
 				// one square
 				moves.add(new_position);
 				// two squares
@@ -243,20 +238,17 @@ public class Board {
 				}
 			}
 		}
-		//capture moves
-		int Wpawn_offsets[] = {15, 17};
+		// capture moves
+		int Wpawn_offsets[] = { 15, 17 };
 
 		for (int i : Wpawn_offsets) {
 			new_position = position + i;
 			if (onBoard(new_position)) {
-				if (
-						(new_position >= 0 && new_position <= 7) &&
-						(this.board[new_position] >= 7 && this.board[new_position] <= 12)
-						) {
+				if ((new_position >= 0 && new_position <= 7)
+						&& (this.board[new_position] >= 7 && this.board[new_position] <= 12)) {
 					// handle pawn promotion
 					moves.add(new_position);
-				}
-				else {
+				} else {
 					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
 					}
@@ -276,8 +268,7 @@ public class Board {
 			if (new_position >= 0 && new_position <= 7) {
 				// handle pawn promotion
 				moves.add(new_position);
-			}
-			else {
+			} else {
 				// one square
 				moves.add(new_position);
 				// two squares
@@ -287,19 +278,16 @@ public class Board {
 				}
 			}
 		}
-		//capture moves
-		int Bpawn_offsets[] = {-15, -17};
+		// capture moves
+		int Bpawn_offsets[] = { -15, -17 };
 		for (int i : Bpawn_offsets) {
 			new_position = position + i;
 			if (onBoard(new_position)) {
-				if (
-						(new_position >= 112 && new_position <= 119) &&
-						(this.board[new_position] >= 1 && this.board[new_position] <= 6)
-						) {
+				if ((new_position >= 112 && new_position <= 119)
+						&& (this.board[new_position] >= 1 && this.board[new_position] <= 6)) {
 					// handle pawn promotion
 					moves.add(new_position);
-				}
-				else {
+				} else {
 					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
 					}
@@ -309,8 +297,6 @@ public class Board {
 		}
 		return moves;
 	}
-
-
 
 	public boolean isSquareAttacked(int position, boolean colour) {
 		// pawns
@@ -322,17 +308,16 @@ public class Board {
 			if (onBoard(position + 17) && (this.board[position + 17] == 7)) {
 				return true;
 			}
-		}
-		else {
+		} else {
 			if (onBoard(position - 15) && (this.board[position - 15] == 1)) {
 				return true;
 			}
 			if (onBoard(position - 17) && (this.board[position - 17] == 1)) {
 				return true;
-			}	
+			}
 		}
 		// king
-		int king_offsets[] = {16, -16, 1, -1, 15, 17, -15, -17};
+		int king_offsets[] = { 16, -16, 1, -1, 15, 17, -15, -17 };
 		for (int i : king_offsets) {
 			int new_position = position + i;
 
@@ -344,20 +329,19 @@ public class Board {
 				}
 
 			}
-		}			
+		}
 		// knight
-		int knight_offsets[] = {33, 31, 18, 14, -33, -31, -18, -14};
+		int knight_offsets[] = { 33, 31, 18, 14, -33, -31, -18, -14 };
 		for (int i : knight_offsets) {
 			int new_position = position + i;
 			if (onBoard(new_position)) {
 				int piece = this.board[new_position];
 
-				if(colour) {
+				if (colour) {
 					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						continue;
 					}
-				}
-				else {
+				} else {
 					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						continue;
 					}
@@ -369,7 +353,7 @@ public class Board {
 			}
 		}
 		// bishop or queen diagonal attacks
-		int bishop_offsets[] = {15, 17, -15, -17};
+		int bishop_offsets[] = { 15, 17, -15, -17 };
 		for (int i : bishop_offsets) {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
@@ -385,9 +369,9 @@ public class Board {
 
 				new_position += i;
 			}
-		}			
+		}
 		// rook or queen up/down attacks
-		int rook_offsets[] = {16, -16, 1, -1};
+		int rook_offsets[] = { 16, -16, 1, -1 };
 		for (int i : rook_offsets) {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
@@ -403,7 +387,7 @@ public class Board {
 
 				new_position += i;
 			}
-		}				
+		}
 		return false;
 	}
 
@@ -464,7 +448,7 @@ public class Board {
 						}
 					}
 
-				} 
+				}
 				// Black
 				else {
 					// Black Pawn
@@ -518,7 +502,6 @@ public class Board {
 
 				}
 
-
 			}
 
 		}
@@ -527,7 +510,7 @@ public class Board {
 
 	public ArrayList<Move> getLegalMoves(boolean colour) {
 		ArrayList<Move> legal_moves = new ArrayList<Move>();
-					
+
 		ArrayList<Move> moves = this.getMoves(colour);
 
 		for (Move move : moves) {
@@ -543,13 +526,13 @@ public class Board {
 		ArrayList<Move> movesBlack = this.getLegalMoves(false);
 		if (movesWhite.size() == 0 && this.inCheck(true)) {
 			return true;
-		} 
+		}
 		if ((movesBlack.size() == 0 && this.inCheck(false))) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public boolean isCheckmate(boolean colour) {
 		ArrayList<Move> moves = this.getLegalMoves(colour);
 		return (moves.size() == 0 && this.inCheck(colour));
@@ -561,16 +544,27 @@ public class Board {
 	}
 
 	public boolean inCheck(boolean colour) {
-		return colour ? this.isSquareAttacked(this.king_square_white, colour) : this.isSquareAttacked(king_square_black, colour);
+		return colour ? this.isSquareAttacked(this.king_square_white, colour)
+				: this.isSquareAttacked(king_square_black, colour);
 	}
 
+	// public boolean inCheckSquare(int king_square, boolean colour) {
+	// return this.isSquareAttacked(king_square, !colour);
+	// }
 
-
-	public boolean isLegal(Move move, boolean colour) {		
+	public boolean isLegal(Move move, boolean colour) {
 		Board boardCopy = new Board(this);
 		boardCopy.makeMove(move);
 		boolean check = boardCopy.inCheck(colour);
 		return !check;
+		// System.out.println(this.isSquareAttacked(99, !false));
+		// System.out.println(boardCopy.inCheckSquare(boardCopy.king_square_black,
+		// colour));
+		// return colour ? !this.inCheckSquare(boardCopy.king_square_white, colour) :
+		// !this.inCheckSquare(boardCopy.king_square_black, colour);
+		// boolean check = boardCopy.inCheckSquare(boardCopy.);
+		// System.out.println(boardCopy.isSquareAttacked(, true));
+		// return !check;
 	}
 
 	public void makeMove(Move move) {
@@ -587,16 +581,24 @@ public class Board {
 		this.board[move.from] = 0;
 		this.colour = !this.colour;
 
-
 	}
 
+	public void getKingSquares() {
+		for (int square = 0; square < 128; square++) {
+			if (onBoard(square)) {
+				if (this.board[square] == 6) {
+					this.king_square_white = square;
+				}
+				if (this.board[square] == 12) {
+					this.king_square_black = square;
+				}
+			}
+		}
+	}
 
 	// return if position is on the board
-	public  boolean onBoard(int position) {
+	public boolean onBoard(int position) {
 		return (position & 0x88) == 0;
 	}
-
-
-
 
 }

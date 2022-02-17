@@ -1,6 +1,5 @@
 package engine;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Border;
@@ -59,19 +58,15 @@ public class Controller implements Initializable {
 				paneList.add(pane);
 				paneArray[i][j] = pane;
 
-				// check for checkmate
-				
-					pane.setOnMousePressed((MouseEvent event) -> {
-						
-						if (this.board.inCheckmate()) {
-							Alert alert = new Alert(Alert.AlertType.INFORMATION);
-						    //alert.setTitle("Checkmate!");
-						    alert.setContentText("Checkmate sir!");
-						    alert.showAndWait();
-						} else {
-						
-						
-						
+				pane.setOnMousePressed((MouseEvent event) -> {
+
+					if (this.board.inCheckmate()) {
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						// alert.setTitle("Checkmate!");
+						alert.setContentText("Checkmate sir!");
+						alert.showAndWait();
+					} else {
+
 						if (paneToMove == null) {
 							pane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
 									CornerRadii.EMPTY, new BorderWidths(3))));
@@ -84,8 +79,8 @@ public class Controller implements Initializable {
 									CornerRadii.EMPTY, new BorderWidths(0))));
 							paneToMove = null;
 						}
-						}
-					});
+					}
+				});
 
 				String light = "-fx-background-color: #e8ceab;";
 				String dark = "-fx-background-color: #bc7944;";
