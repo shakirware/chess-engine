@@ -36,7 +36,7 @@ public class Board {
 				BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY 
 		};
 		//this.board = boardTest2;
-		this.board = Fen.parseFenString("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R");
+		this.board = Fen.parseFenString("r2kr3/pppQ2pp/8/4Np1q/8/2PB4/P4PPP/R3R1K1");
 		this.colour = WHITE;
 	}
 
