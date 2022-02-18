@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javax.swing.JButton;
 
 import java.net.URL;
 
@@ -46,7 +45,7 @@ public class Controller implements Initializable {
 		paneList = new ArrayList<>();
 		paneArray = new Pane[8][8];
 		this.board = new Board();
-		this.search = new Search(this.board, 2);
+		this.search = new Search(this.board, 3);
 	}
 
 	@FXML
@@ -83,7 +82,6 @@ public class Controller implements Initializable {
 							for (Move LegalMove : moves) {
 								if (LegalMove.equals(playerMove)) {
 									this.board.makeMove(playerMove);
-									playerMove.output();
 									initBoard();
 									
 									if (this.board.inCheckmate()) {
@@ -93,7 +91,6 @@ public class Controller implements Initializable {
 									
 									Move ai_move = search.miniMax();
 									this.board.makeMove(ai_move);
-									ai_move.output();
 									initBoard();
 								}
 							}

@@ -32,7 +32,7 @@ public class Board {
 				BPAWN, BPAWN, BPAWN, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, BROOK, BKNIGHT, BBISHOP,
 				BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY };
 		// this.board = boardTest2;
-		this.board = Fen.parseFenString("r2kr3/pppb2pp/8/4Np1q/3Q4/2PB4/P4PPP/R3R1K1");
+		this.board = Fen.parseFenString("r2k3r/pppb2pp/8/5p1q/3Q4/2PB1N2/P4PPP/R3R1K1");
 		this.getKingSquares();
 		this.colour = WHITE;
 	}
@@ -336,17 +336,6 @@ public class Board {
 			int new_position = position + i;
 			if (onBoard(new_position)) {
 				int piece = this.board[new_position];
-/*
-				if (colour) {
-					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
-						return true;
-					}
-				} else {
-					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
-						return true;
-					}
-				}
-*/
 				if (!colour ? piece == 2 : piece == 8) {
 					return true;
 				}
@@ -362,7 +351,7 @@ public class Board {
 				if (!colour ? (piece == 3 || piece == 5) : (piece == 9 || piece == 11)) {
 					return true;
 				}
-				if(piece !=0) {
+				if (piece != 0) {
 					break;
 				}
 				new_position += i;
@@ -378,7 +367,7 @@ public class Board {
 				if (!colour ? (piece == 4 || piece == 5) : (piece == 10 || piece == 11)) {
 					return true;
 				}
-				if(piece !=0) {
+				if (piece != 0) {
 					break;
 				}
 				new_position += i;
