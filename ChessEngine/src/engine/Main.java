@@ -21,9 +21,16 @@ public class Main {
 		
 		Board board = new Board();
 
-		//Move move = new Move(115, 99);
+		Move playerMove = new Move(51, 99);
+		board.makeMove(playerMove);
 		
-		System.out.println(board.isCheckmate(false));
+		System.out.println(board.isSquareAttacked(99, false));
+		
+		ArrayList<Move> moves = board.getLegalMoves(false);
+
+		for (Move move : moves) {
+			move.output();
+		}
 		
 	}
 

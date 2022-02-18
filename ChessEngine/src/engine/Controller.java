@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javax.swing.JButton;
 
 import java.net.URL;
 
@@ -38,12 +39,14 @@ public class Controller implements Initializable {
 	private int to;
 
 	private Board board;
+	private Search search;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		paneList = new ArrayList<>();
 		paneArray = new Pane[8][8];
 		this.board = new Board();
+		this.search = new Search(this.board, 2);
 	}
 
 	@FXML
@@ -62,9 +65,7 @@ public class Controller implements Initializable {
 				pane.setOnMousePressed((MouseEvent event) -> {
 
 					if (this.board.inCheckmate()) {
-						Alert alert = new Alert(Alert.AlertType.INFORMATION);
-						alert.setContentText("Checkmate sir!");
-						alert.showAndWait();
+						mateAlert();
 					} else {
 
 						if (paneToMove == null) {
@@ -81,14 +82,21 @@ public class Controller implements Initializable {
 							
 							for (Move LegalMove : moves) {
 								if (LegalMove.equals(playerMove)) {
-									LegalMove.output();
 									this.board.makeMove(playerMove);
+									playerMove.output();
 									initBoard();
-				
 									
-								
+									if (this.board.inCheckmate()) {
+										mateAlert();
+										return;
+									}
+									
+									Move ai_move = search.miniMax();
+									this.board.makeMove(ai_move);
+									ai_move.output();
+									initBoard();
 								}
-								}
+							}
 							paneToMove.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
 									CornerRadii.EMPTY, new BorderWidths(0))));
 							paneToMove = null;
@@ -142,32 +150,12 @@ public class Controller implements Initializable {
 			}
 		}
 	}
-	/*
-	public void InterfaceMove(Move playerMove) {
-		from = playerMove.from;
-		to = playerMove.from;
-		
-		int piece = this.board.board[from];
-		
-		int[] fromC = convert0x64(from);
-		int[] toC = convert0x64(to);
-		
-		Pane fromPane = paneArray[fromC[0]][fromC[1]];
-		Pane toPane = paneArray[toC[0]][toC[1]];
-		
-		String fromStyle = fromPane.getStyle();
-		String toStyle = toPane.getStyle();
-		System.out.println(fromStyle);
-		
-		fromPane.
-		
-		fromPane.getChildren().clear();
-		toPane.getChildren().clear();
-		
-		fromPane.setStyle("fx-background-image: null;" + fromStyle);
-		toPane.setStyle("-fx-background-image: url('" + pieceImages[piece] + "');" + toStyle);
+	
+	public void mateAlert() {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setContentText("Checkmate sir!");
+		alert.showAndWait();
 	}
-	*/
 
 	public int convert0x88(int y, int x) {
 		int index = 0;

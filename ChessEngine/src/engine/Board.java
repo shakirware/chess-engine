@@ -32,7 +32,7 @@ public class Board {
 				BPAWN, BPAWN, BPAWN, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, BROOK, BKNIGHT, BBISHOP,
 				BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY };
 		// this.board = boardTest2;
-		this.board = Fen.parseFenString("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR");
+		this.board = Fen.parseFenString("r2kr3/pppb2pp/8/4Np1q/3Q4/2PB4/P4PPP/R3R1K1");
 		this.getKingSquares();
 		this.colour = WHITE;
 	}
@@ -336,18 +336,18 @@ public class Board {
 			int new_position = position + i;
 			if (onBoard(new_position)) {
 				int piece = this.board[new_position];
-
+/*
 				if (colour) {
 					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
-						continue;
+						return true;
 					}
 				} else {
 					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
-						continue;
+						return true;
 					}
 				}
-
-				if (colour ? piece == 2 : piece == 8) {
+*/
+				if (!colour ? piece == 2 : piece == 8) {
 					return true;
 				}
 			}
@@ -362,11 +362,9 @@ public class Board {
 				if (!colour ? (piece == 3 || piece == 5) : (piece == 9 || piece == 11)) {
 					return true;
 				}
-
-				if (piece != 0) {
+				if(piece !=0) {
 					break;
 				}
-
 				new_position += i;
 			}
 		}
@@ -380,11 +378,9 @@ public class Board {
 				if (!colour ? (piece == 4 || piece == 5) : (piece == 10 || piece == 11)) {
 					return true;
 				}
-
-				if (piece != 0) {
+				if(piece !=0) {
 					break;
 				}
-
 				new_position += i;
 			}
 		}
@@ -548,23 +544,11 @@ public class Board {
 				: this.isSquareAttacked(king_square_black, colour);
 	}
 
-	// public boolean inCheckSquare(int king_square, boolean colour) {
-	// return this.isSquareAttacked(king_square, !colour);
-	// }
-
 	public boolean isLegal(Move move, boolean colour) {
 		Board boardCopy = new Board(this);
 		boardCopy.makeMove(move);
 		boolean check = boardCopy.inCheck(colour);
 		return !check;
-		// System.out.println(this.isSquareAttacked(99, !false));
-		// System.out.println(boardCopy.inCheckSquare(boardCopy.king_square_black,
-		// colour));
-		// return colour ? !this.inCheckSquare(boardCopy.king_square_white, colour) :
-		// !this.inCheckSquare(boardCopy.king_square_black, colour);
-		// boolean check = boardCopy.inCheckSquare(boardCopy.);
-		// System.out.println(boardCopy.isSquareAttacked(, true));
-		// return !check;
 	}
 
 	public void makeMove(Move move) {
