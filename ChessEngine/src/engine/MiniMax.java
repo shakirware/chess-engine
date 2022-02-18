@@ -2,213 +2,232 @@ package engine;
 
 import java.util.ArrayList;
 
+import static engine.Pieces.*;
+
 public class MiniMax {
+	
+	static int winVal = Integer.MAX_VALUE;
+    static int loseVal = Integer.MIN_VALUE;
+	
 	static Move nextMove;
 	static int depth;
-	static int counter;
 	static int tempDepth;
-	static int[] material_score = { 0, 100, 300, 350, 500, 1000, 10000, 100, 300, 350, 500, 1000, 10000 };
-	
-    protected static int [] pawnTable = {
-            0,  0,  0,  0,  0,  0,  0,  0,
-            50, 50, 50, 50, 50, 50, 50, 50,
-            10, 10, 20, 30, 30, 20, 10, 10,
-            5,  5, 10, 25, 25, 10,  5,  5,
-            0,  0,  0, 20, 20,  0,  0,  0,
-            5, -5,-10,  0,  0,-10, -5,  5,
-            5, 10, 10,-20,-20, 10, 10,  5,
-            0,  0,  0,  0,  0,  0,  0,  0 };
+	static int counter;
 
-          // Placement Precedence for all Knights
-        protected static int [] knightTable = {
-            -50,-40,-30,-30,-30,-30,-40,-50,
-            -40,-20,  0,  0,  0,  0,-20,-40,
-            -30,  0, 10, 15, 15, 10,  0,-30,
-            -30,  5, 15, 20, 20, 15,  5,-30,
-            -30,  0, 15, 20, 20, 15,  0,-30,
-            -30,  5, 10, 15, 15, 10,  5,-30,
-            -40,-20,  0,  5,  5,  0,-20,-40,
-            -50,-40,-30,-30,-30,-30,-40,-50 };
+	protected static int[] pawnTable = { 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 50, 50, 50, 50, 50, 50, 10, 10, 20, 30, 30, 20,
+			10, 10, 5, 5, 10, 25, 25, 10, 5, 5, 0, 0, 0, 20, 20, 0, 0, 0, 5, -5, -10, 0, 0, -10, -5, 5, 5, 10, 10, -20,
+			-20, 10, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        protected static int [] bishopPrecedence = {
-            -20,-10,-10,-10,-10,-10,-10,-20,
-            -10,  0,  0,  0,  0,  0,  0,-10,
-            -10,  0,  5, 10, 10,  5,  0,-10,
-            -10,  5,  5, 10, 10,  5,  5,-10,
-            -10,  0, 10, 10, 10, 10,  0,-10,
-            -10, 10, 10, 10, 10, 10, 10,-10,
-            -10,  5,  0,  0,  0,  0,  5,-10,
-            -20,-10,-10,-10,-10,-10,-10,-20 };
+	// Placement Precedence for all Knights
+	protected static int[] knightTable = { -50, -40, -30, -30, -30, -30, -40, -50, -40, -20, 0, 0, 0, 0, -20, -40, -30,
+			0, 10, 15, 15, 10, 0, -30, -30, 5, 15, 20, 20, 15, 5, -30, -30, 0, 15, 20, 20, 15, 0, -30, -30, 5, 10, 15,
+			15, 10, 5, -30, -40, -20, 0, 5, 5, 0, -20, -40, -50, -40, -30, -30, -30, -30, -40, -50 };
 
-        protected static int [] rookTable = {
-              0,  0,  0,  0,  0,  0,  0,  0,
-              5, 10, 10, 10, 10, 10, 10,  5,
-             -5,  0,  0,  0,  0,  0,  0, -5,
-             -5,  0,  0,  0,  0,  0,  0, -5,
-             -5,  0,  0,  0,  0,  0,  0, -5,
-             -5,  0,  0,  0,  0,  0,  0, -5,
-             -5,  0,  0,  0,  0,  0,  0, -5,
-              0,  0,  0,  5,  5,  0,  0,  0 };
-          
-        protected static int [] queenTable = {
-            -20,-10,-10, -5, -5,-10,-10,-20,
-            -10,  0,  0,  0,  0,  0,  0,-10,
-            -10,  0,  5,  5,  5,  5,  0,-10,
-             -5,  0,  5,  5,  5,  5,  0, -5,
-              0,  0,  5,  5,  5,  5,  0, -5,
-            -10,  5,  5,  5,  5,  5,  0,-10,
-            -10,  0,  5,  0,  0,  0,  0,-10,
-            -20,-10,-10, -5, -5,-10,-10,-20 };
+	protected static int[] bishopPrecedence = { -20, -10, -10, -10, -10, -10, -10, -20, -10, 0, 0, 0, 0, 0, 0, -10, -10,
+			0, 5, 10, 10, 5, 0, -10, -10, 5, 5, 10, 10, 5, 5, -10, -10, 0, 10, 10, 10, 10, 0, -10, -10, 10, 10, 10, 10,
+			10, 10, -10, -10, 5, 0, 0, 0, 0, 5, -10, -20, -10, -10, -10, -10, -10, -10, -20 };
 
-        protected static int [] kingTable = {
-            -30,-40,-40,-50,-50,-40,-40,-30,
-            -30,-40,-40,-50,-50,-40,-40,-30,
-            -30,-40,-40,-50,-50,-40,-40,-30,
-            -30,-40,-40,-50,-50,-40,-40,-30,
-            -20,-30,-30,-40,-40,-30,-30,-20,
-            -10,-20,-20,-20,-20,-20,-20,-10,
-             20, 20,  0,  0,  0,  0, 20, 20,
-             20, 30, 10,  0,  0, 10, 30, 20 };
+	protected static int[] rookTable = { 0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 10, 10, 10, 10, 10, 5, -5, 0, 0, 0, 0, 0, 0, -5,
+			-5, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, 0, 0, 0, 0, -5, 0,
+			0, 0, 5, 5, 0, 0, 0 };
 
-	public static void setDepth(int depth) {
-		MiniMax.depth = depth;
-	}
+	protected static int[] queenTable = { -20, -10, -10, -5, -5, -10, -10, -20, -10, 0, 0, 0, 0, 0, 0, -10, -10, 0, 5,
+			5, 5, 5, 0, -10, -5, 0, 5, 5, 5, 5, 0, -5, 0, 0, 5, 5, 5, 5, 0, -5, -10, 5, 5, 5, 5, 5, 0, -10, -10, 0, 5,
+			0, 0, 0, 0, -10, -20, -10, -10, -5, -5, -10, -10, -20 };
+
+	protected static int[] kingTable = { -30, -40, -40, -50, -50, -40, -40, -30, -30, -40, -40, -50, -50, -40, -40, -30,
+			-30, -40, -40, -50, -50, -40, -40, -30, -30, -40, -40, -50, -50, -40, -40, -30, -20, -30, -30, -40, -40,
+			-30, -30, -20, -10, -20, -20, -20, -20, -20, -20, -10, 20, 20, 0, 0, 0, 0, 20, 20, 20, 30, 10, 0, 0, 10, 30,
+			20 };
 
 	public static Move getNextMove(Board board, boolean side) {
 		counter = 0;
-		minimax(board, side, true, Integer.MIN_VALUE, Integer.MAX_VALUE, depth);
+		Move move = minimax(board, BLACK, 2);
 		System.out.println("Boards evaluated: " + counter);
-		return nextMove;
+		return move;
 	}
 
-	private static int minimax(Board board, boolean colour, boolean maximize, int alpha, int beta, int d) {
+	private static int max(Board board, boolean colour, int d) {
 		counter++;
-
-		if (d == 0 || board.isStalemate(colour) || board.isStalemate(!colour) || board.isCheckmate(!colour)) {
-			return eval(board, colour);
+		if (board.isStalemate(BLACK) || board.isStalemate(WHITE) || board.inCheckmate() || d > MiniMax.tempDepth) {
+			return eval(board, BLACK, d);
 		}
-
-		//if (d == 0) {
-		// eval(board, colour);
-		//}
-		
-		int bestv = 0;
-		int newv = 0;
-			
-		if (maximize) {
-			bestv = Integer.MIN_VALUE;
-			// Check all next possible boards
-			for (Board nextBoard : getNextBoards(board, colour)) {
-				// Recursive call
-				newv = minimax(nextBoard, colour, false, alpha, beta, d - 1);
-				if (newv >= bestv) { // Check if we have new max
-					bestv = newv;
-					if (d == depth) {
-						nextMove = nextBoard.lastMove;
-					}
-				}
-				alpha = Math.max(alpha, bestv);
-		          if (beta <= alpha) { 
-		              return bestv;
-		          }
+		int best = loseVal;
+		int current;
+		ArrayList<Move> moves = board.getLegalMoves(BLACK);
+		for (Move move : moves) {
+			Board b = new Board(board);
+			b.makeMove(move);	
+			current = min(b, WHITE, d + 1);
+			b.undoLastMove();
+			if (current > best) {
+				best = current;
 			}
-			return bestv;	
-		} else {
-			bestv = Integer.MAX_VALUE;
-			// Check all next possible boards
-			for (Board nextBoard : getNextBoards(board, !colour)) {
-				// Recursive call
-				newv = minimax(nextBoard, colour, true, alpha, beta, d - 1);
-				if (newv <= bestv) { // Check if we have a new min
-					bestv = newv;
-				}
-			}
-          beta = Math.min(beta, bestv);
-          if (beta <= alpha) { //Useless branch - don't explore
-              return bestv;
-          }
 		}
-		return bestv;
+		return best;
 	}
 
-	public static ArrayList<Board> getNextBoards(Board board, boolean colour) {
-		ArrayList<Board> nextBoards = new ArrayList<>();
+	private static int min(Board board, boolean colour, int d) {
+		counter++;
+		if (board.isStalemate(BLACK) || board.isStalemate(WHITE) || board.inCheckmate() || d > MiniMax.tempDepth) {
+			return eval(board, WHITE, d);
+		}
 
-		ArrayList<Move> moves = board.getLegalMoves(colour);
+		int best = winVal;
+		int current;
+		ArrayList<Move> moves = board.getLegalMoves(WHITE);
 		for (Move move : moves) {
 			Board b = new Board(board);
 			b.makeMove(move);
-			nextBoards.add(b);
-		}
-		return nextBoards;
-	}
-
-	public static int eval(Board board, boolean colour, int depth) {
-		
-		
-		if (board.isCheckmate(!colour)) {
-			if (depth <= tempDepth) {
-				tempDepth = depth;
-				return Integer.MAX_VALUE;
-			} else {
-				return Integer.MIN_VALUE;
+			current = max(b, BLACK, d);
+			b.undoLastMove();
+			if (current < best) {
+				best = current;
 			}
 		}
-		
+		return best;
+	}
+
+	private static Move minimax(Board board, boolean colour, int maxDepth) {
+		counter++;
+		for (MiniMax.depth = 1; MiniMax.depth < maxDepth; MiniMax.depth++) {
+			int current = loseVal;
+			int best = loseVal;
+			int index = 0;
+			int bestIndex = 0;
+
+			MiniMax.tempDepth = MiniMax.depth;
+
+			ArrayList<Move> moves = board.getLegalMoves(BLACK);
+			for (Move move : moves) {
+				Board b = new Board(board);
+				b.makeMove(move);
+				current = min(b, WHITE, 1);
+				b.undoLastMove();
+				
+				if (best <= current) {
+					best = current;
+					//moves.get(bestIndex).output();;
+					bestIndex = index;
+				}
+				index++;
+			}
+			
+			
+			if (best == winVal) {
+				return moves.get(bestIndex);
+			}
+
+			if ((MiniMax.depth + 1) == maxDepth) {
+				//System.out.println(depth);
+				return moves.get(bestIndex);
+			}
+
+		}
+
+		return new Move(1, 1);
+	}
+
+
+	public static int eval(Board board, boolean colour, int d) {
+		if (board.isCheckmate(WHITE)) {
+			if (d <= MiniMax.tempDepth) {
+				System.out.println("Found a win - DepthLimit = " + d + " " + MiniMax.tempDepth);
+				board.lastMove.output();
+				MiniMax.tempDepth = d;
+				//System.out.println("Found a win - DepthLimit = " + depth);
+				return winVal;
+			} else {
+				return loseVal;
+			}
+		}
+
 		if (board.isStalemate(colour) || board.isStalemate(!colour) || board.isCheckmate(colour)) {
-			return Integer.MIN_VALUE;
+			return loseVal;
 		}
 		
-		return getMaterials(board);
+
+		return getMaterials(board, colour);
 	}
-	
-	public static int getMaterials(Board board) {
+
+	public static int getMaterials(Board board, boolean colour) {
 		int val = 0;
-        int wPawns = 0, wRooks = 0, wBishops = 0, wQueens = 0, wKnights = 0, wKings = 0;
-        int bPawns = 0, bRooks = 0, bBishops = 0, bQueens = 0, bKnights = 0, bKings = 0;
-        
-        
-        for (int square = 0; square < 128; square++) {
+		int wPawns = 0, wBishops = 0;
+		int bPawns = 0, bBishops = 0;
+		for (int square = 0; square < 128; square++) {
 			if (board.onBoard(square)) {
-				
+
 				int piece = board.board[square];
 				int[] c = convert0x64(square);
+				int row = c[0];
+				int col = c[1];
 				switch (piece) {
 				case 1:
 					wPawns++;
-					val += (100 + (pawnTable[8*(7 - row) + col])); 
-				
+					val += (100 + (pawnTable[8 * (7 - row) + col]));
+					break;
+
+				case 2:
+					val += (320 + (knightTable[8 * (7 - row) + col]));
+					break;
+
+				case 3:
+					wBishops++;
+					val += (330 + (rookTable[8 * (7 - row) + col]));
+					break;
+				case 4:
+					val += (500 + (rookTable[8 * (7 - row) + col]));
+					break;
+				case 5:
+					val += (900 + (queenTable[8 * (7 - row) + col]));
+					break;
+				case 6:
+					val += (20000 + (kingTable[8 * (7 - row) + col]));
+					break;
+				case 7:
+					bPawns++;
+					val -= (100 + (pawnTable[8 + (8 * row) - (1 + col)]));
+					break;
+				case 8:
+					val -= (320 + (knightTable[8 + (8 * row) - (1 + col)]));
+					break;
+				case 9:
+					bBishops++;
+					val -= (330 + (rookTable[8 + (8 * row) - (1 + col)]));
+					break;
+				case 10:
+					val -= (500 + (rookTable[8 + (8 * row) - (1 + col)]));
+					break;
+				case 11:
+					val -= (900 + (queenTable[8 + (8 * row) - (1 + col)]));
+					break;
+				case 12:
+					val -= (20000 + (kingTable[8 + (8 * row) - (1 + col)]));
+					break;
 				}
-				
-				
-				if (piece >= 1 && piece <= 6) {
-					whitePiecesValue += material_score[piece];
+
+				if (wPawns == 0) {
+					val -= 20;
 				}
-				if (piece > 6 && piece < 12) {
-					blackPiecesValue += material_score[piece];
+
+				if (bPawns == 0) {
+					val += 20;
+				}
+
+				// Bonus for bishop pair
+				if (wBishops == 2) {
+					val += 40;
+				}
+
+				if (bBishops == 2) {
+					val -= 40;
 				}
 			}
 		}
-        
-        
-		
-		int blackPiecesValue = 0;
-		int whitePiecesValue = 0;
-		for (int square = 0; square < 128; square++) {
-			if (board.onBoard(square)) {
-				int piece = board.board[square];
-				if (piece >= 1 && piece <= 6) {
-					whitePiecesValue += material_score[piece];
-				}
-				if (piece > 6 && piece < 12) {
-					blackPiecesValue += material_score[piece];
-				}
-			}
-		}
-		return blackPiecesValue - whitePiecesValue;
+		return (colour ? val : val * -1);
 
 	}
-	
+
 	public static int[] convert0x64(int index) {
 		int x = 0;
 		int y = 0;

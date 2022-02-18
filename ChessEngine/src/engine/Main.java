@@ -19,18 +19,17 @@ public class Main {
 		
 		// FROM: 115 TO: 99
 		
-		Board board = new Board();
-
-		Move playerMove = new Move(51, 99);
+		Board board = new Board("3k4/8/5q2/8/8/8/8/Kb6");
+		System.out.println(board.board[0]);
+		Move playerMove = new Move(0, 1);
 		board.makeMove(playerMove);
 		
-		System.out.println(board.isSquareAttacked(99, false));
+		System.out.println(board.board[0]);
+		board.undoLastMove();
+		System.out.println(board.board[0]);
+		//board.lastMove.output();
+		//System.out.println(board.lastMovetook);
 		
-		ArrayList<Move> moves = board.getLegalMoves(false);
-
-		for (Move move : moves) {
-			move.output();
-		}
 		
 	}
 

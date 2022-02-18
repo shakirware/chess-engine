@@ -21,6 +21,7 @@ public class Board {
 	public int king_square_white = 4;
 	public int king_square_black = 116;
 	public Move lastMove;
+	public int lastMovetook;
 
 	public Board() {
 		this.board = new int[] { WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK, EMPTY, EMPTY, EMPTY,
@@ -545,6 +546,8 @@ public class Board {
 	}
 
 	public void makeMove(Move move) {
+		this.lastMove = move;
+		this.lastMovetook = this.board[move.to];
 		
 		if (this.board[move.from] == 6) {
 			this.king_square_white = move.to;
@@ -557,9 +560,19 @@ public class Board {
 		this.board[move.to] = this.board[move.from];
 		this.board[move.from] = 0;
 		this.colour = !this.colour;
-		
-		this.lastMove = move;
 	}
+	
+	public void undoLastMove() {
+		Move move = this.lastMove;
+		int takenPiece = this.lastMovetook;
+	
+		int initialPiece = this.board[move.to];
+		
+		this.board[move.from] = initialPiece;
+		this.board[move.to] = takenPiece;
+	}
+	
+	
 
 	public void getKingSquares() {
 		for (int square = 0; square < 128; square++) {
