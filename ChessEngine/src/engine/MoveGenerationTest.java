@@ -174,7 +174,14 @@ public class MoveGenerationTest {
 	@Test
 	public void testCheckmate() {
 		Board board = new Board("3k4/8/8/3q3b/b7/8/2ppp3/3K4");
-		boolean check = board.inCheckmate();
+		boolean check = board.isCheckmate(true);
+		assertTrue(check);
+	}
+	
+	@Test
+	public void testStalemate() {
+		Board board = new Board("3k4/8/8/7b/8/8/6q1/4K3");
+		boolean check = board.isStalemate(true);
 		assertTrue(check);
 	}
 

@@ -80,10 +80,10 @@ public class Search {
 
 	public int getScore(Board board, boolean colour) {
 		// check mate for player
-		if (board.isCheckmate(!colour)) {
+		if (board.isCheckmate(colour)) {
 			return loseVal;
 		}
-		if (board.isCheckmate(colour)) {
+		if (board.isCheckmate(!colour)) {
 			return winVal;
 		} else {
 			return getMaterial(board, colour);

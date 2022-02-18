@@ -38,14 +38,13 @@ public class Controller implements Initializable {
 	private int to;
 
 	private Board board;
-	private Search search;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		paneList = new ArrayList<>();
 		paneArray = new Pane[8][8];
-		this.board = new Board("3k4/8/8/3q3b/b7/8/2ppp3/3K4");
-		this.search = new Search(this.board, 3);
+		this.board = new Board("r2k4/8/5q2/8/8/8/1K6/8");
+		MiniMax.setDepth(6);
 	}
 
 	@FXML
@@ -89,8 +88,9 @@ public class Controller implements Initializable {
 										mateAlert();
 										return;
 									}
-									
-									Move ai_move = search.miniMax();
+
+									Move ai_move = MiniMax.getNextMove(this.board, BLACK);
+									ai_move.output();
 									this.board.makeMove(ai_move);
 									initBoard();
 								}
