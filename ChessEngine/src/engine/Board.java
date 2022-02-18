@@ -31,8 +31,11 @@ public class Board {
 				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN,
 				BPAWN, BPAWN, BPAWN, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, BROOK, BKNIGHT, BBISHOP,
 				BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY };
-		// this.board = boardTest2;
-		this.board = Fen.parseFenString("r2k3r/pppb2pp/8/5p1q/3Q4/2PB1N2/P4PPP/R3R1K1");
+		this.colour = WHITE;
+	}
+	
+	public Board(String fen) {
+		this.board = new Fen().parseFenString(fen);
 		this.getKingSquares();
 		this.colour = WHITE;
 	}
@@ -189,7 +192,6 @@ public class Board {
 		for (int i : rook_offsets) {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
-
 				// if piece is black and hits opps piece or its own piece
 				if (this.board[position] >= 7 && this.board[position] <= 12) {
 					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
@@ -225,7 +227,7 @@ public class Board {
 		int new_position = position + 16;
 		// non capture moves
 		if (onBoard(new_position) && this.board[new_position] == 0) {
-			if (new_position >= 0 && new_position <= 7) {
+			if (new_position >= 112 && new_position <= 119) {
 				// handle pawn promotion
 				moves.add(new_position);
 			} else {
@@ -244,7 +246,7 @@ public class Board {
 		for (int i : Wpawn_offsets) {
 			new_position = position + i;
 			if (onBoard(new_position)) {
-				if ((new_position >= 0 && new_position <= 7)
+				if ((new_position >= 112 && new_position <= 119)
 						&& (this.board[new_position] >= 7 && this.board[new_position] <= 12)) {
 					// handle pawn promotion
 					moves.add(new_position);
@@ -282,8 +284,9 @@ public class Board {
 		int Bpawn_offsets[] = { -15, -17 };
 		for (int i : Bpawn_offsets) {
 			new_position = position + i;
+			
 			if (onBoard(new_position)) {
-				if ((new_position >= 112 && new_position <= 119)
+				if ((new_position >= 0 && new_position <= 7)
 						&& (this.board[new_position] >= 1 && this.board[new_position] <= 6)) {
 					// handle pawn promotion
 					moves.add(new_position);

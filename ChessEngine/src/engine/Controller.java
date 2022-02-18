@@ -44,7 +44,7 @@ public class Controller implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		paneList = new ArrayList<>();
 		paneArray = new Pane[8][8];
-		this.board = new Board();
+		this.board = new Board("3k4/8/8/3q3b/b7/8/2ppp3/3K4");
 		this.search = new Search(this.board, 3);
 	}
 
@@ -73,6 +73,7 @@ public class Controller implements Initializable {
 							paneToMove = pane;
 							from = square;
 						} else {
+							System.out.println("FROM: " + from + " TO: " + to);
 							to = square;
 							
 							Move playerMove = new Move(from, to);

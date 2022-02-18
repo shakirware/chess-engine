@@ -10,9 +10,11 @@ import static engine.Pieces.*;
  *
  */
 public class Fen {
-
-	public static int[] parseFenString(String fen) {
-		int[] board = boardEmpty;
+	
+	public int[] board;
+	
+	public int[] parseFenString(String fen) {
+		this.board = boardEmpty;
 		int count = 0;
 
 		for (int rank = 7; rank >= 0; rank--) {
@@ -21,7 +23,7 @@ public class Fen {
 				if ((square & 0x88) == 0) {
 					char fenChar = fen.charAt(count);
 					if (Character.isLetter(fenChar)) {
-						board[square] = pieces.indexOf(fenChar);
+						this.board[square] = pieces.indexOf(fenChar);
 						count++;
 					}
 					if (Character.isDigit(fenChar)) {
@@ -41,6 +43,6 @@ public class Fen {
 				}
 			}
 		}
-		return board;
+		return this.board;
 	}
 }
