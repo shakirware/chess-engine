@@ -32,7 +32,7 @@ public class Board {
 				BPAWN, BPAWN, BPAWN, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, BROOK, BKNIGHT, BBISHOP,
 				BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY };
 		// this.board = boardTest2;
-		this.board = Fen.parseFenString("4Q1k1/Bpp2ppp/8/5b2/8/8/Pq1n1PPP/5RK1");
+		this.board = Fen.parseFenString("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR");
 		this.getKingSquares();
 		this.colour = WHITE;
 	}

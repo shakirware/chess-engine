@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+
 import java.net.URL;
 
 import static engine.Pieces.*;
@@ -62,7 +63,6 @@ public class Controller implements Initializable {
 
 					if (this.board.inCheckmate()) {
 						Alert alert = new Alert(Alert.AlertType.INFORMATION);
-						// alert.setTitle("Checkmate!");
 						alert.setContentText("Checkmate sir!");
 						alert.showAndWait();
 					} else {
@@ -74,7 +74,21 @@ public class Controller implements Initializable {
 							from = square;
 						} else {
 							to = square;
-							System.out.println("FROM: " + from + " TO: " + to);
+							
+							Move playerMove = new Move(from, to);
+							
+							ArrayList<Move> moves = this.board.getLegalMoves(true);
+							
+							for (Move LegalMove : moves) {
+								if (LegalMove.equals(playerMove)) {
+									LegalMove.output();
+									this.board.makeMove(playerMove);
+									initBoard();
+				
+									
+								
+								}
+								}
 							paneToMove.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
 									CornerRadii.EMPTY, new BorderWidths(0))));
 							paneToMove = null;
@@ -84,26 +98,27 @@ public class Controller implements Initializable {
 
 				String light = "-fx-background-color: #e8ceab;";
 				String dark = "-fx-background-color: #bc7944;";
+				String bc = "-fx-background-size: 80 80;" + "-fx-background-position: center;";
 
 				if (piece != 0) {
 					if (i % 2 == 0) {
 						if (j % 2 == 0) {
 							// light
 							pane.setStyle(light + "-fx-background-image: url('" + pieceImages[piece] + "');"
-									+ "-fx-background-size: 80 80;" + "-fx-background-position: center;");
+									+ bc);
 
 						} else {
 							// dark
 							pane.setStyle(dark + "-fx-background-image: url('" + pieceImages[piece] + "');"
-									+ "-fx-background-size: 80 80;" + "-fx-background-position: center;");
+									+ bc);
 						}
 					} else {
 						if (j % 2 != 0) {
 							pane.setStyle(light + "-fx-background-image: url('" + pieceImages[piece] + "');"
-									+ "-fx-background-size: 80 80;" + "-fx-background-position: center;");
+									+ bc);
 						} else {
 							pane.setStyle(dark + "-fx-background-image: url('" + pieceImages[piece] + "');"
-									+ "-fx-background-size: 80 80;" + "-fx-background-position: center;");
+									+ bc);
 						}
 					}
 				} else {
@@ -127,6 +142,32 @@ public class Controller implements Initializable {
 			}
 		}
 	}
+	/*
+	public void InterfaceMove(Move playerMove) {
+		from = playerMove.from;
+		to = playerMove.from;
+		
+		int piece = this.board.board[from];
+		
+		int[] fromC = convert0x64(from);
+		int[] toC = convert0x64(to);
+		
+		Pane fromPane = paneArray[fromC[0]][fromC[1]];
+		Pane toPane = paneArray[toC[0]][toC[1]];
+		
+		String fromStyle = fromPane.getStyle();
+		String toStyle = toPane.getStyle();
+		System.out.println(fromStyle);
+		
+		fromPane.
+		
+		fromPane.getChildren().clear();
+		toPane.getChildren().clear();
+		
+		fromPane.setStyle("fx-background-image: null;" + fromStyle);
+		toPane.setStyle("-fx-background-image: url('" + pieceImages[piece] + "');" + toStyle);
+	}
+	*/
 
 	public int convert0x88(int y, int x) {
 		int index = 0;
