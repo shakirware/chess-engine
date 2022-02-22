@@ -13,8 +13,13 @@ public class Fen {
 	
 	public int[] board;
 	
-	public int[] parseFenString(String fen) {
+	public int[] parseFenString(Board board, String fenString) {
 		this.board = boardEmpty;
+		String[] split = fenString.split("\\s+");
+		String fen = split[0];
+		String turn = split[1];
+		String castling = split[2];
+		// String enpassant = split[3];
 		int count = 0;
 
 		for (int rank = 7; rank >= 0; rank--) {
@@ -43,6 +48,16 @@ public class Fen {
 				}
 			}
 		}
+		
+		if (castling.contains("Q") || castling.contains("K")) {
+		    board.WHITE_CASTLING = true;
+		} else if (castling.contains("q") || castling.contains("k")) {
+			board.BLACK_CASTLING = true;
+		} else {
+			board.WHITE_CASTLING = false;
+			board.WHITE_CASTLING = false;
+		}
+		
 		return this.board;
 	}
 }

@@ -17,6 +17,7 @@ public class Board {
 
 	public int[] board;
 	public boolean colour;
+	public boolean turn;
 
 	public int king_square_white = 4;
 	public int king_square_black = 116;
@@ -40,7 +41,9 @@ public class Board {
 	}
 
 	public Board(String fen) {
-		this.board = new Fen().parseFenString(fen);
+		this.WHITE_CASTLING = false;
+		this.BLACK_CASTLING = false;
+		this.board = new Fen().parseFenString(this, fen);
 		this.getKingSquares();
 		this.colour = WHITE;
 	}

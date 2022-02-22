@@ -43,7 +43,7 @@ public class Controller implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		paneList = new ArrayList<>();
 		paneArray = new Pane[8][8];
-		this.board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R");
+		this.board = new Board("4k2r/6r1/8/8/8/8/3R4/R3K3 w Qk");
 	}
 
 	@FXML
