@@ -4,7 +4,6 @@
 package engine;
 
 import static engine.Pieces.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,52 +15,48 @@ import java.util.Arrays;
 
 public class Board {
 	/**
-     * A 0x88 integer array representing pieces on a chess board.
-     */
+	 * A 0x88 integer array representing pieces on a chess board.
+	 */
 	public int[] board;
 	/**
-     * The colour of the current player. 
-     * true : white
-     * false : black
-     */
+	 * The colour of the current player. true : white false : black
+	 */
 	public boolean colour;
 	/**
-     * The turn of the current player.
-     * true : white
-     * false : black
-     */
+	 * The turn of the current player. true : white false : black
+	 */
 	public boolean turn;
 	/**
-     * The position on the board where the white king resides.
-     */
+	 * The position on the board where the white king resides.
+	 */
 	public int king_square_white = 4;
 	/**
-     * The position on the board where the black king resides.
-     */
+	 * The position on the board where the black king resides.
+	 */
 	public int king_square_black = 116;
 	/**
-     * The last move performed.
-     */
+	 * The last move performed.
+	 */
 	public Move lastMove;
 	/**
-     * The last piece that was captured.
-     */
+	 * The last piece that was captured.
+	 */
 	public int lastMovetook;
 	/**
-     * Castling rights for White
-     */
-	public boolean WHITE_CASTLING = true;
+	 * Castling rights for White
+	 */
+	public boolean WHITE_CASTLING = false;
 	/**
-     * Castling rights for Black
-     */
-	public boolean BLACK_CASTLING = true;
+	 * Castling rights for Black
+	 */
+	public boolean BLACK_CASTLING = false;
 
 	/**
-	* The constructor for class Board.
-	* 
-	* Initialises the board to the chess starting position and 
-	* sets the current player colour to white.
-	*/
+	 * The constructor for class Board.
+	 * 
+	 * Initialises the board to the chess starting position and sets the current
+	 * player colour to white.
+	 */
 	public Board() {
 		this.board = new int[] { WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK, EMPTY, EMPTY, EMPTY,
 				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, EMPTY, EMPTY,
@@ -73,33 +68,34 @@ public class Board {
 				BPAWN, BPAWN, BPAWN, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, BROOK, BKNIGHT, BBISHOP,
 				BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY };
 		this.colour = WHITE;
+		this.BLACK_CASTLING = true; // add in comments
+		this.WHITE_CASTLING = true;
 	}
-	
+
 	/**
-	* Another constructor for class Board.
-	* 
-	* Initialises the board to the positions represented by then FEN string.
-	* Sets the castling rights to false as they will get changed to true if the 
-	* FEN String indicates it.
-	* 
-	* @param fen forsyth-edwards notation string
-	*/
+	 * Another constructor for class Board.
+	 * 
+	 * Initialises the board to the positions represented by then FEN string. Sets
+	 * the castling rights to false as they will get changed to true if the FEN
+	 * String indicates it.
+	 * 
+	 * @param fen forsyth-edwards notation string
+	 */
 	public Board(String fen) {
-		this.WHITE_CASTLING = false;
-		this.BLACK_CASTLING = false;
+		// change castling right comment
 		this.board = new Fen().parseFenString(this, fen);
 		this.getKingSquares();
 		this.colour = WHITE;
 	}
 
 	/**
-	* Another constructor for class Board.
-	* 
-	* This constructor is used to perform a deep copy of a board class.
-	* The array and other variables are copied from the previous object.
-	* 
-	* @param board a Board object
-	*/
+	 * Another constructor for class Board.
+	 * 
+	 * This constructor is used to perform a deep copy of a board class. The array
+	 * and other variables are copied from the previous object.
+	 * 
+	 * @param board a Board object
+	 */
 	public Board(Board board) {
 		this.board = Arrays.copyOf(board.board, board.board.length);
 		this.colour = board.colour;
@@ -108,22 +104,23 @@ public class Board {
 	}
 
 	/**
-	* Returns a deep copy of the object's board array.
-	*
-	* @return		board array copy
-	*/
+	 * Returns a deep copy of the object's board array.
+	 *
+	 * @return board array copy
+	 */
 	public int[] getBoard() {
 		return Arrays.copyOf(this.board, this.board.length);
 	}
-	
+
 	/**
-	* Returns an array of the positions a knight can move to given
-	* the position of the knight  on the board. The knight moves are calculated using an 
-	* offset. Potential captures and blocked positions are taken into consideration.
-	*
-	* @param		position		an integer representing the position of the knight on the board
-	* @return		array of positions knight can move to
-	*/ 
+	 * Returns an array of the positions a knight can move to given the position of
+	 * the knight on the board. The knight moves are calculated using an offset.
+	 * Potential captures and blocked positions are taken into consideration.
+	 *
+	 * @param position an integer representing the position of the knight on the
+	 *                 board
+	 * @return array of positions knight can move to
+	 */
 	public ArrayList<Integer> getKnightMoves(int position) {
 		int knight_offsets[] = { 33, 31, 18, 14, -33, -31, -18, -14 };
 		ArrayList<Integer> moves = new ArrayList<Integer>();
@@ -656,6 +653,63 @@ public class Board {
 		this.lastMove = move;
 		this.lastMovetook = this.board[move.to];
 
+		if (this.WHITE_CASTLING) {
+			// White castling
+			if (move.from == 4) {
+				// king side
+				if (move.to == 7) {
+					this.king_square_white = 6;
+					// move king to g1
+					this.board[6] = this.board[4];
+					this.board[4] = 0;
+					// move rook to f1
+					this.board[5] = this.board[7];
+					this.board[7] = 0;
+				}
+				// queen side
+				if (move.to == 0) {
+					this.king_square_white = 2;
+					// move king to c1
+					this.board[2] = this.board[4];
+					this.board[4] = 0;
+					// move rook to d1
+					this.board[3] = this.board[0];
+					this.board[0] = 0;
+				}
+				this.colour = !this.colour;
+				return;
+			}
+		}
+		
+		if (this.BLACK_CASTLING) {
+			// Black castling
+			if (move.from == 116) {
+				// king side
+				if (move.to == 119) {
+					this.king_square_black = 118;
+					// move king to g8
+					this.board[116] = this.board[118];
+					this.board[116] = 0;
+					// move rook to f8
+					this.board[119] = this.board[117];
+					this.board[119] = 0;
+				}
+				// queen side
+				if (move.to == 112) {
+					this.king_square_black = 114;
+					// move king to c8
+					this.board[116] = this.board[114];
+					this.board[116] = 0;
+					// move rook to d8
+					this.board[112] = this.board[115];
+					this.board[112] = 0;
+
+				}
+				this.colour = !this.colour;
+				return;
+			}
+		}
+
 		if (this.board[move.from] == 6) {
 			this.king_square_white = move.to;
 			this.WHITE_CASTLING = false;
@@ -664,58 +718,6 @@ public class Board {
 		if (this.board[move.from] == 12) {
 			this.king_square_black = move.to;
 			this.BLACK_CASTLING = false;
-		}
-
-		// White castling
-		if (move.from == 4) {
-			// king side
-			if (move.to == 7) {
-				this.king_square_white = 6;
-				// move king to g1
-				this.board[6] = this.board[4];
-				this.board[4] = 0;
-				// move rook to f1
-				this.board[5] = this.board[7];
-				this.board[7] = 0;
-			}
-			// queen side
-			if (move.to == 0) {
-				this.king_square_white = 2;
-				// move king to c1
-				this.board[2] = this.board[4];
-				this.board[4] = 0;
-				// move rook to d1
-				this.board[3] = this.board[0];
-				this.board[0] = 0;
-			}
-			this.colour = !this.colour;
-			return;
-		}
-		// Black castling
-		if (move.from == 116) {
-			// king side
-			if (move.to == 119) {
-				this.king_square_black = 118;
-				// move king to g8
-				this.board[116] = this.board[118];
-				this.board[116] = 0;
-				// move rook to f8
-				this.board[119] = this.board[117];
-				this.board[119] = 0;
-			}
-			// queen side
-			if (move.to == 112) {
-				this.king_square_black = 114;
-				// move king to c8
-				this.board[116] = this.board[114];
-				this.board[116] = 0;
-				// move rook to d8
-				this.board[112] = this.board[115];
-				this.board[112] = 0;
-
-			}
-			this.colour = !this.colour;
-			return;
 		}
 
 		this.board[move.to] = this.board[move.from];

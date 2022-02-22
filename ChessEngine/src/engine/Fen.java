@@ -53,9 +53,10 @@ public class Fen {
 		    board.WHITE_CASTLING = true;
 		} else if (castling.contains("q") || castling.contains("k")) {
 			board.BLACK_CASTLING = true;
+			System.out.println("yessir");
 		} else {
 			board.WHITE_CASTLING = false;
-			board.WHITE_CASTLING = false;
+			board.BLACK_CASTLING = false;
 		}
 		
 		return this.board;

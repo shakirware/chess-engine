@@ -133,7 +133,6 @@ public class MiniMax {
 		if (board.isCheckmate(WHITE)) {
 			if (d <= MiniMax.tempDepth) {
 				System.out.println("Found a win - DepthLimit = " + d + " " + MiniMax.tempDepth);
-				board.lastMove.output();
 				MiniMax.tempDepth = d;
 				//System.out.println("Found a win - DepthLimit = " + depth);
 				return winVal;
