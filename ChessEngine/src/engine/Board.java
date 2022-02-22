@@ -17,11 +17,14 @@ public class Board {
 
 	public int[] board;
 	public boolean colour;
-	// public boolean turn = WHITE;
+
 	public int king_square_white = 4;
 	public int king_square_black = 116;
 	public Move lastMove;
 	public int lastMovetook;
+
+	public boolean WHITE_CASTLING = true;
+	public boolean BLACK_CASTLING = true;
 
 	public Board() {
 		this.board = new int[] { WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK, EMPTY, EMPTY, EMPTY,
@@ -35,7 +38,7 @@ public class Board {
 				BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY };
 		this.colour = WHITE;
 	}
-	
+
 	public Board(String fen) {
 		this.board = new Fen().parseFenString(fen);
 		this.getKingSquares();
@@ -286,7 +289,7 @@ public class Board {
 		int Bpawn_offsets[] = { -15, -17 };
 		for (int i : Bpawn_offsets) {
 			new_position = position + i;
-			
+
 			if (onBoard(new_position)) {
 				if ((new_position >= 0 && new_position <= 7)
 						&& (this.board[new_position] >= 1 && this.board[new_position] <= 6)) {
@@ -389,6 +392,7 @@ public class Board {
 			if (onBoard(square)) {
 				// White
 				if (colour) {
+
 					// White Pawn
 					if (board[square] == 1) {
 						ArrayList<Integer> destinations = this.getWhitePawnMoves(square);
@@ -436,6 +440,24 @@ public class Board {
 							Move move = new Move(square, destination);
 							moves.add(move);
 						}
+
+						if (this.WHITE_CASTLING) {
+							// king side castling
+							if ((board[5] == 0) && (board[6] == 0)) {
+								if ((!this.isSquareAttacked(5, true)) && (!this.isSquareAttacked(6, true))) {
+									Move move = new Move(this.king_square_white, 7);
+									moves.add(move);
+								}
+							}
+							// queen side castling
+							if ((board[1] == 0) && (board[2] == 0) && (board[3] == 0)) {
+								if ((!this.isSquareAttacked(4, true)) && (!this.isSquareAttacked(2, true))) {
+									Move move = new Move(this.king_square_white, 0);
+									moves.add(move);
+								}
+							}
+						}
+
 					}
 
 				}
@@ -488,6 +510,22 @@ public class Board {
 							Move move = new Move(square, destination);
 							moves.add(move);
 						}
+						if (this.BLACK_CASTLING) {
+							// king side castling
+							if ((board[117] == 0) && (board[118] == 0)) {
+								if ((!this.isSquareAttacked(116, true)) && (!this.isSquareAttacked(117, true))) {
+									Move move = new Move(this.king_square_black, 119);
+									moves.add(move);
+								}
+							}
+							// queen side castling
+							if ((board[113] == 0) && (board[114] == 0) && (board[115] == 0)) {
+								if ((!this.isSquareAttacked(116, true)) && (!this.isSquareAttacked(115, true))) {
+									Move move = new Move(this.king_square_black, 112);
+									moves.add(move);
+								}
+							}
+						}
 					}
 
 				}
@@ -496,6 +534,7 @@ public class Board {
 
 		}
 		return moves;
+
 	}
 
 	public ArrayList<Move> getLegalMoves(boolean colour) {
@@ -548,31 +587,83 @@ public class Board {
 	public void makeMove(Move move) {
 		this.lastMove = move;
 		this.lastMovetook = this.board[move.to];
-		
+
 		if (this.board[move.from] == 6) {
 			this.king_square_white = move.to;
+			this.WHITE_CASTLING = false;
 		}
 
 		if (this.board[move.from] == 12) {
 			this.king_square_black = move.to;
+			this.BLACK_CASTLING = false;
+		}
+
+		// White castling
+		if (move.from == 4) {
+			// king side
+			if (move.to == 7) {
+				this.king_square_white = 6;
+				// move king to g1
+				this.board[6] = this.board[4];
+				this.board[4] = 0;
+				// move rook to f1
+				this.board[5] = this.board[7];
+				this.board[7] = 0;
+			}
+			// queen side
+			if (move.to == 0) {
+				this.king_square_white = 2;
+				// move king to c1
+				this.board[2] = this.board[4];
+				this.board[4] = 0;
+				// move rook to d1
+				this.board[3] = this.board[0];
+				this.board[0] = 0;
+			}
+			this.colour = !this.colour;
+			return;
+		}
+		// Black castling
+		if (move.from == 116) {
+			// king side
+			if (move.to == 119) {
+				this.king_square_black = 118;
+				// move king to g8
+				this.board[116] = this.board[118];
+				this.board[116] = 0;
+				// move rook to f8
+				this.board[119] = this.board[117];
+				this.board[119] = 0;
+			}
+			// queen side
+			if (move.to == 112) {
+				this.king_square_black = 114;
+				// move king to c8
+				this.board[116] = this.board[114];
+				this.board[116] = 0;
+				// move rook to d8
+				this.board[112] = this.board[115];
+				this.board[112] = 0;
+
+			}
+			this.colour = !this.colour;
+			return;
 		}
 
 		this.board[move.to] = this.board[move.from];
 		this.board[move.from] = 0;
 		this.colour = !this.colour;
 	}
-	
+
 	public void undoLastMove() {
 		Move move = this.lastMove;
 		int takenPiece = this.lastMovetook;
-	
+
 		int initialPiece = this.board[move.to];
-		
+
 		this.board[move.from] = initialPiece;
 		this.board[move.to] = takenPiece;
 	}
-	
-	
 
 	public void getKingSquares() {
 		for (int square = 0; square < 128; square++) {

@@ -43,7 +43,7 @@ public class Controller implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		paneList = new ArrayList<>();
 		paneArray = new Pane[8][8];
-		this.board = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+		this.board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R");
 	}
 
 	@FXML
@@ -71,10 +71,10 @@ public class Controller implements Initializable {
 							paneToMove = pane;
 							from = square;
 						} else {
-							System.out.println("FROM: " + from + " TO: " + to);
 							to = square;
 							
 							Move playerMove = new Move(from, to);
+							playerMove.output();
 							
 							ArrayList<Move> moves = this.board.getLegalMoves(true);
 							
