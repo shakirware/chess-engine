@@ -9,24 +9,59 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * @author shakir
- *
+ * Represents a chess board and it's functionality.
+ * 
+ * @author Shakir
  */
 
 public class Board {
-
+	/**
+     * A 0x88 integer array representing pieces on a chess board.
+     */
 	public int[] board;
+	/**
+     * The colour of the current player. 
+     * true : white
+     * false : black
+     */
 	public boolean colour;
+	/**
+     * The turn of the current player.
+     * true : white
+     * false : black
+     */
 	public boolean turn;
-
+	/**
+     * The position on the board where the white king resides.
+     */
 	public int king_square_white = 4;
+	/**
+     * The position on the board where the black king resides.
+     */
 	public int king_square_black = 116;
+	/**
+     * The last move performed.
+     */
 	public Move lastMove;
+	/**
+     * The last piece that was captured.
+     */
 	public int lastMovetook;
-
+	/**
+     * Castling rights for White
+     */
 	public boolean WHITE_CASTLING = true;
+	/**
+     * Castling rights for Black
+     */
 	public boolean BLACK_CASTLING = true;
 
+	/**
+	* The constructor for class Board.
+	* 
+	* Initialises the board to the chess starting position and 
+	* sets the current player colour to white.
+	*/
 	public Board() {
 		this.board = new int[] { WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK, EMPTY, EMPTY, EMPTY,
 				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, EMPTY, EMPTY,
@@ -39,7 +74,16 @@ public class Board {
 				BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY };
 		this.colour = WHITE;
 	}
-
+	
+	/**
+	* Another constructor for class Board.
+	* 
+	* Initialises the board to the positions represented by then FEN string.
+	* Sets the castling rights to false as they will get changed to true if the 
+	* FEN String indicates it.
+	* 
+	* @param fen forsyth-edwards notation string
+	*/
 	public Board(String fen) {
 		this.WHITE_CASTLING = false;
 		this.BLACK_CASTLING = false;
@@ -48,6 +92,14 @@ public class Board {
 		this.colour = WHITE;
 	}
 
+	/**
+	* Another constructor for class Board.
+	* 
+	* This constructor is used to perform a deep copy of a board class.
+	* The array and other variables are copied from the previous object.
+	* 
+	* @param board a Board object
+	*/
 	public Board(Board board) {
 		this.board = Arrays.copyOf(board.board, board.board.length);
 		this.colour = board.colour;
@@ -55,10 +107,23 @@ public class Board {
 		this.king_square_black = board.king_square_black;
 	}
 
+	/**
+	* Returns a deep copy of the object's board array.
+	*
+	* @return		board array copy
+	*/
 	public int[] getBoard() {
 		return Arrays.copyOf(this.board, this.board.length);
 	}
-
+	
+	/**
+	* Returns an array of the positions a knight can move to given
+	* the position of the knight  on the board. The knight moves are calculated using an 
+	* offset. Potential captures and blocked positions are taken into consideration.
+	*
+	* @param		position		an integer representing the position of the knight on the board
+	* @return		array of positions knight can move to
+	*/ 
 	public ArrayList<Integer> getKnightMoves(int position) {
 		int knight_offsets[] = { 33, 31, 18, 14, -33, -31, -18, -14 };
 		ArrayList<Integer> moves = new ArrayList<Integer>();
