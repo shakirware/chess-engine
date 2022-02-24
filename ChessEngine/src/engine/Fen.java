@@ -1,6 +1,3 @@
-/**
- * 
- */
 package engine;
 
 import static engine.Pieces.*;
@@ -17,7 +14,7 @@ public class Fen {
 		this.board = boardEmpty;
 		String[] split = fenString.split("\\s+");
 		String fen = split[0];
-		String turn = split[1];
+		//String turn = split[1];
 		String castling = split[2];
 		// String enpassant = split[3];
 		int count = 0;

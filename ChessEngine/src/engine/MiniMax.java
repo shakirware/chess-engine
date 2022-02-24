@@ -107,7 +107,6 @@ public class MiniMax {
 				
 				if (best <= current) {
 					best = current;
-					//moves.get(bestIndex).output();;
 					bestIndex = index;
 				}
 				index++;

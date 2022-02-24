@@ -59,7 +59,8 @@ public class Board {
 	 * The constructor for class Board.
 	 * 
 	 * Initialises the board to the chess starting position and sets the current
-	 * player colour to white.
+	 * player colour to white. Sets the castling rights to true as the game starts with
+	 * the default board.
 	 */
 	public Board() {
 		this.board = new int[] { WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK, EMPTY, EMPTY, EMPTY,
@@ -72,21 +73,18 @@ public class Board {
 				BPAWN, BPAWN, BPAWN, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, BROOK, BKNIGHT, BBISHOP,
 				BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY };
 		this.colour = WHITE;
-		this.BLACK_CASTLING = true; // add in comments
+		this.BLACK_CASTLING = true;
 		this.WHITE_CASTLING = true;
 	}
 
 	/**
 	 * Another constructor for class Board.
 	 * 
-	 * Initialises the board to the positions represented by then FEN string. Sets
-	 * the castling rights to false as they will get changed to true if the FEN
-	 * String indicates it.
+	 * Initialises the board to the positions represented by then FEN string. 
 	 * 
 	 * @param fen forsyth-edwards notation string
 	 */
 	public Board(String fen) {
-		// change castling right comment
 		this.board = new Fen().parseFenString(this, fen);
 		this.getKingSquares();
 		this.colour = WHITE;
@@ -154,6 +152,15 @@ public class Board {
 		return moves;
 	}
 
+	/**
+	 * Returns an array of the positions a king can move to given the position of
+	 * the king on the board. The king moves are calculated using an offset.
+	 * Potential captures and blocked positions are taken into consideration.
+	 *
+	 * @param position an integer representing the position of the king on the
+	 *                 board
+	 * @return array of positions king can move to
+	 */
 	public ArrayList<Integer> getKingMoves(int position) {
 		int king_offsets[] = { 16, -16, 1, -1, 15, 17, -15, -17 };
 		ArrayList<Integer> moves = new ArrayList<Integer>();
@@ -183,6 +190,15 @@ public class Board {
 		return moves;
 	}
 
+	/**
+	 * Returns an array of the positions a bishop can move to given the position of
+	 * the bishop on the board. The bishop moves are calculated using an offset.
+	 * Potential captures and blocked positions are taken into consideration.
+	 *
+	 * @param position an integer representing the position of the bishop on the
+	 *                 board
+	 * @return array of positions bishop can move to
+	 */
 	public ArrayList<Integer> getBishopMoves(int position) {
 		int bishop_offsets[] = { 15, 17, -15, -17 };
 		ArrayList<Integer> moves = new ArrayList<Integer>();
@@ -222,6 +238,15 @@ public class Board {
 		return moves;
 	}
 
+	/**
+	 * Returns an array of the positions a queen can move to given the position of
+	 * the queen on the board. The queen moves are calculated using an offset.
+	 * Potential captures and blocked positions are taken into consideration.
+	 *
+	 * @param position an integer representing the position of the queen on the
+	 *                 board
+	 * @return array of positions queen can move to
+	 */
 	public ArrayList<Integer> getQueenMoves(int position) {
 		int queen_offsets[] = { 16, -16, 1, -1, 15, 17, -15, -17 };
 		ArrayList<Integer> moves = new ArrayList<Integer>();
@@ -260,6 +285,15 @@ public class Board {
 		return moves;
 	}
 
+	/**
+	 * Returns an array of the positions a rook can move to given the position of
+	 * the rook on the board. The queen moves are calculated using an offset.
+	 * Potential captures and blocked positions are taken into consideration.
+	 *
+	 * @param position an integer representing the position of the rook on the
+	 *                 board
+	 * @return array of positions rook can move to
+	 */
 	public ArrayList<Integer> getRookMoves(int position) {
 		int rook_offsets[] = { 16, -16, 1, -1 };
 		ArrayList<Integer> moves = new ArrayList<Integer>();
@@ -296,6 +330,15 @@ public class Board {
 		return moves;
 	}
 
+	/**
+	 * Returns an array of the positions a white pawn can move to given the position of
+	 * the white pawn on the board. The white pawn moves are calculated using an offset.
+	 * Potential captures and blocked positions are taken into consideration.
+	 *
+	 * @param position an integer representing the position of the white pawn on the
+	 *                 board
+	 * @return array of positions white pawn can move to
+	 */
 	public ArrayList<Integer> getWhitePawnMoves(int position) {
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int new_position = position + 16;
@@ -328,14 +371,21 @@ public class Board {
 					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
 					}
-
-					// add enpassant
 				}
 			}
 		}
 		return moves;
 	}
 
+	/**
+	 * Returns an array of the positions a black pawn can move to given the position of
+	 * the black pawn on the board. The black pawn moves are calculated using an offset.
+	 * Potential captures and blocked positions are taken into consideration.
+	 *
+	 * @param position an integer representing the position of the black pawn on the
+	 *                 board
+	 * @return array of positions black pawn can move to
+	 */
 	public ArrayList<Integer> getBlackPawnMoves(int position) {
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int new_position = position - 16;
@@ -663,9 +713,6 @@ public class Board {
 
 	public boolean isStalemate(boolean colour) {
 		ArrayList<Move> moves = this.getLegalMoves(colour);
-		for (Move move : moves) {
-			move.output();
-		}
 		return (moves.size() == 0 && !this.inCheck(colour));
 	}
 
