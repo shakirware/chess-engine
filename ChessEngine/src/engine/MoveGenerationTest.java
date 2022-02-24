@@ -3,7 +3,7 @@ package engine;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.Test;
@@ -13,7 +13,7 @@ public class MoveGenerationTest {
 
 	@Test
 	public void testBishop() {
-		Board board = new Board("k2P4/6P1/5b2/6B1/3Q3P/8/8/K2R4");
+		Board board = new Board("k2P4/6P1/5b2/6B1/3Q3P/8/8/K2R4 w KQkq - 0 1");
 
 		ArrayList<Integer> array = new ArrayList<Integer>();
 		
@@ -34,7 +34,7 @@ public class MoveGenerationTest {
 
 	@Test
 	public void testKnight() {
-		Board board = new Board("2k1q3/8/8/8/8/4B3/8/3K1N2");
+		Board board = new Board("2k1q3/8/8/8/8/4B3/8/3K1N2 w KQkq - 0 1");
 
 		ArrayList<Integer> array = new ArrayList<Integer>();
 		
@@ -52,7 +52,7 @@ public class MoveGenerationTest {
 
 	@Test
 	public void testRook() {
-		Board board = new Board("2k1q3/8/8/8/n7/4B3/8/R2K1N2");
+		Board board = new Board("2k1q3/8/8/8/n7/4B3/8/R2K1N2 w KQkq - 0 1");
 
 		ArrayList<Integer> array = new ArrayList<Integer>();
 		
@@ -72,7 +72,7 @@ public class MoveGenerationTest {
 
 	@Test
 	public void testWhitePawn() {
-		Board board = new Board("2k1q3/8/8/5r1r/n5P1/4B3/8/R2K1N2");
+		Board board = new Board("2k1q3/8/8/5r1r/n5P1/4B3/8/R2K1N2 w KQkq - 0 1");
 
 		ArrayList<Integer> array = new ArrayList<Integer>();
 		
@@ -90,7 +90,7 @@ public class MoveGenerationTest {
 
 	@Test
 	public void testBlackPawn() {
-		Board board = new Board("3kq3/8/1p6/Q1R2r1r/n5P1/4B3/8/R2K1N2");
+		Board board = new Board("3kq3/8/1p6/Q1R2r1r/n5P1/4B3/8/R2K1N2 w KQkq - 0 1");
 
 		ArrayList<Integer> array = new ArrayList<Integer>();
 		
@@ -108,7 +108,7 @@ public class MoveGenerationTest {
 
 	@Test
 	public void testKing() {
-		Board board = new Board("3kq3/8/1p6/Q1R2r1r/n5P1/4B3/2p1p3/R2K1N2");
+		Board board = new Board("3kq3/8/1p6/Q1R2r1r/n5P1/4B3/2p1p3/R2K1N2 w KQkq - 0 1");
 
 		ArrayList<Integer> array = new ArrayList<Integer>();
 		
@@ -128,7 +128,7 @@ public class MoveGenerationTest {
 
 	@Test
 	public void testQueen() {
-		Board board = new Board("3kq3/N7/1p6/Q1R2r1r/n5P1/4B3/2p1p3/R2KnN2");
+		Board board = new Board("3kq3/N7/1p6/Q1R2r1r/n5P1/4B3/2p1p3/R2KnN2 w KQkq - 0 1");
 
 		ArrayList<Integer> array = new ArrayList<Integer>();
 		
@@ -151,21 +151,21 @@ public class MoveGenerationTest {
 
 	@Test
 	public void testSquareAttacked() {
-		Board board = new Board("3kq3/N7/1p6/Q1R2r1r/n5P1/4B3/2p1p3/R2KnN2");
+		Board board = new Board("3kq3/N7/1p6/Q1R2r1r/n5P1/4B3/2p1p3/R2KnN2 w KQkq - 0 1");
 		boolean result = board.isSquareAttacked(3, true);
 		assertTrue(result);
 	}
 
 	@Test
 	public void testCheck() {
-		Board board = new Board("3kq3/N7/1p6/Q1R2r1r/n5P1/4B3/2p1p3/R2KnN2");
+		Board board = new Board("3kq3/N7/1p6/Q1R2r1r/n5P1/4B3/2p1p3/R2KnN2 w KQkq - 0 1");
 		boolean check = board.inCheck(true);
 		assertTrue(check);
 	}
 
 	@Test
 	public void testLegal() {
-		Board board = new Board("3k4/8/8/8/6q1/8/4b3/3K4");
+		Board board = new Board("3k4/8/8/8/6q1/8/4b3/3K4 w KQkq - 0 1");
 		Move move1 = new Move(3, 20);
 		boolean check = board.isLegal(move1, true);
 		assertFalse(check);
@@ -173,14 +173,14 @@ public class MoveGenerationTest {
 
 	@Test
 	public void testCheckmate() {
-		Board board = new Board("3k4/8/8/3q3b/b7/8/2ppp3/3K4");
+		Board board = new Board("3k4/8/8/3q3b/b7/8/2ppp3/3K4 w KQkq - 0 1");
 		boolean check = board.isCheckmate(true);
 		assertTrue(check);
 	}
 	
 	@Test
 	public void testStalemate() {
-		Board board = new Board("3k4/8/8/7b/8/8/6q1/4K3");
+		Board board = new Board("3k4/8/8/7b/8/8/6q1/4K3 w - - 0 1");
 		boolean check = board.isStalemate(true);
 		assertTrue(check);
 	}
@@ -194,6 +194,18 @@ public class MoveGenerationTest {
 		boardCopy.makeMove(move);
 
 		assertNotEquals(board.board[4], boardCopy.board[4]);
+	}
+	
+	@Test
+	public void testEnPassant() {
+		Board board = new Board("rnbqkbnr/ppp1pppp/8/3P4/8/8/PPP1PPPP/RNBQKBNR w - - 0 1");
+		Move move = new Move(100, 68);
+		Move enpassantMove = new Move(67, 84);
+		
+		board.makeMove(move);
+
+		ArrayList<Move> moves = board.getLegalMoves(true);
+		assertTrue(moves.contains(enpassantMove));
 	}
 
 }

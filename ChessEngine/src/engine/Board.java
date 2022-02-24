@@ -50,7 +50,11 @@ public class Board {
 	 * Castling rights for Black
 	 */
 	public boolean BLACK_CASTLING = false;
-
+	/**
+	 * Current enpassant move
+	 */
+	public Move enpassant;
+	
 	/**
 	 * The constructor for class Board.
 	 * 
@@ -465,6 +469,19 @@ public class Board {
 							Move move = new Move(square, destination);
 							moves.add(move);
 						}
+						// if on 5th rank and square next to it has a black pawn
+						if (square >= 61 && square <= 71) {
+							if(board[square - 1] == 7) {
+								Move move = new Move(square, square + 15);
+								enpassant = move;
+								moves.add(move);
+							}
+							if (board[square + 1] == 7) {
+								Move move = new Move(square, square + 17);
+								enpassant = move;
+								moves.add(move);
+							}
+						}
 					}
 					// White Knight
 					if (board[square] == 2) {
@@ -534,6 +551,18 @@ public class Board {
 						for (int destination : destinations) {
 							Move move = new Move(square, destination);
 							moves.add(move);
+						}
+						if (square >= 48 && square <= 55) {
+							if(board[square - 1] == 7) {
+								Move move = new Move(square, square - 17);
+								enpassant = move;
+								moves.add(move);
+							}
+							if (board[square + 1] == 7) {
+								Move move = new Move(square, square - 15);
+								enpassant = move;
+								moves.add(move);
+							}
 						}
 					}
 					// Black Knight
@@ -634,6 +663,9 @@ public class Board {
 
 	public boolean isStalemate(boolean colour) {
 		ArrayList<Move> moves = this.getLegalMoves(colour);
+		for (Move move : moves) {
+			move.output();
+		}
 		return (moves.size() == 0 && !this.inCheck(colour));
 	}
 
@@ -652,6 +684,18 @@ public class Board {
 	public void makeMove(Move move) {
 		this.lastMove = move;
 		this.lastMovetook = this.board[move.to];
+		
+		if (move == enpassant) {
+			if (this.colour) {
+				this.board[move.to - 16] = 0;
+				this.board[move.to] = this.board[move.from];
+				this.board[move.from] = 0;
+			} else {
+				this.board[move.to + 16] = 0;
+				this.board[move.to] = this.board[move.from];
+				this.board[move.from] = 0;
+			}
+		}
 
 		if (this.WHITE_CASTLING) {
 			// White castling

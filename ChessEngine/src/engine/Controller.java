@@ -43,7 +43,7 @@ public class Controller implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		paneList = new ArrayList<>();
 		paneArray = new Pane[8][8];
-		this.board = new Board("4k2r/4r3/8/8/8/8/2R5/2K1R3 w - - 0 1");
+		this.board = new Board("rnbqkbnr/pp5p/8/3Pp3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	}
 
 	@FXML
@@ -90,8 +90,8 @@ public class Controller implements Initializable {
 									}
 
 									Move ai_move = MiniMax.getNextMove(this.board, BLACK);
-									ai_move.output();
 									System.out.print("COMPUTER MOVE - ");
+									ai_move.output();
 									this.board.makeMove(ai_move);
 									initBoard();
 								}
