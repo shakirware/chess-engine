@@ -9,7 +9,6 @@ import java.util.Arrays;
 
 /**
  * Represents a chess board and it's functionality.
- * 
  * @author Shakir
  */
 
@@ -50,20 +49,28 @@ public class Board {
 	 * Castling rights for Black
 	 */
 	public boolean BLACK_CASTLING = false;
+	
+	public boolean WHITE_CASTLING_SHORT = false;
+	public boolean WHITE_CASTLING_LONG = false;
+	public boolean BLACK_CASTLING_SHORT = false;
+	public boolean BLACK_CASTLING_LONG = false;
+	
 	/**
 	 * Current enpassant move
 	 */
-	public Move enpassant;
+	public Move enpassant = null;
+	
+	public String FenEnPassant = null;
 	
 	/**
 	 * The constructor for class Board.
 	 * 
-	 * Initialises the board to the chess starting position and sets the current
-	 * player colour to white. Sets the castling rights to true as the game starts with
-	 * the default board.
+	 * Initialises the board to the chess starting position and sets the 
+	 * current player colour to white. Sets the castling rights to 
+	 * true as the game starts with the default board.
 	 */
 	public Board() {
-		this.board = new int[] { WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK, EMPTY, EMPTY, EMPTY,
+		this.board = new int[] {WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK, EMPTY, EMPTY, EMPTY,
 				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, EMPTY, EMPTY,
 				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
 				EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
@@ -75,6 +82,10 @@ public class Board {
 		this.colour = WHITE;
 		this.BLACK_CASTLING = true;
 		this.WHITE_CASTLING = true;
+		this.WHITE_CASTLING_SHORT = true;
+		this.WHITE_CASTLING_LONG = true;
+		this.BLACK_CASTLING_SHORT = true;
+		this.BLACK_CASTLING_LONG = true;
 	}
 
 	/**
@@ -103,6 +114,7 @@ public class Board {
 		this.colour = board.colour;
 		this.king_square_white = board.king_square_white;
 		this.king_square_black = board.king_square_black;
+		this.enpassant = board.enpassant;
 	}
 
 	/**
@@ -124,26 +136,21 @@ public class Board {
 	 * @return array of positions knight can move to
 	 */
 	public ArrayList<Integer> getKnightMoves(int position) {
-		int knight_offsets[] = { 33, 31, 18, 14, -33, -31, -18, -14 };
+		int knight_offsets[] = {33, 31, 18, 14, -33, -31, -18, -14};
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		for (int i : knight_offsets) {
 			int new_position = position + i;
 			if (onBoard(new_position)) {
-
-				// if piece is black
 				if (this.board[position] >= 7 && this.board[position] <= 12) {
 					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
 					}
 				}
-
-				// if piece is white
 				if (this.board[position] >= 1 && this.board[position] <= 6) {
 					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
 					}
 				}
-
 				if (this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
@@ -162,26 +169,21 @@ public class Board {
 	 * @return array of positions king can move to
 	 */
 	public ArrayList<Integer> getKingMoves(int position) {
-		int king_offsets[] = { 16, -16, 1, -1, 15, 17, -15, -17 };
+		int king_offsets[] = {16, -16, 1, -1, 15, 17, -15, -17};
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		for (int i : king_offsets) {
 			int new_position = position + i;
 			if (onBoard(new_position)) {
-
-				// if piece is black
 				if (this.board[position] >= 7 && this.board[position] <= 12) {
 					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
 					}
 				}
-
-				// if piece is white
 				if (this.board[position] >= 1 && this.board[position] <= 6) {
 					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
 					}
 				}
-
 				if (this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
@@ -200,13 +202,11 @@ public class Board {
 	 * @return array of positions bishop can move to
 	 */
 	public ArrayList<Integer> getBishopMoves(int position) {
-		int bishop_offsets[] = { 15, 17, -15, -17 };
+		int bishop_offsets[] = {15, 17, -15, -17};
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		for (int i : bishop_offsets) {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
-
-				// if piece is black and hits opps piece
 				if (this.board[position] >= 7 && this.board[position] <= 12) {
 					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
@@ -216,8 +216,6 @@ public class Board {
 						break;
 					}
 				}
-
-				// if piece is white and hits opps piece
 				if (this.board[position] >= 1 && this.board[position] <= 6) {
 					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
@@ -227,8 +225,6 @@ public class Board {
 						break;
 					}
 				}
-
-				// if empty square
 				if (this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
@@ -248,12 +244,11 @@ public class Board {
 	 * @return array of positions queen can move to
 	 */
 	public ArrayList<Integer> getQueenMoves(int position) {
-		int queen_offsets[] = { 16, -16, 1, -1, 15, 17, -15, -17 };
+		int queen_offsets[] = {16, -16, 1, -1, 15, 17, -15, -17};
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		for (int i : queen_offsets) {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
-				// if piece is black and hits opps piece
 				if (this.board[position] >= 7 && this.board[position] <= 12) {
 					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
@@ -263,8 +258,6 @@ public class Board {
 						break;
 					}
 				}
-
-				// if piece is white and hits opps piece
 				if (this.board[position] >= 1 && this.board[position] <= 6) {
 					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
@@ -274,8 +267,6 @@ public class Board {
 						break;
 					}
 				}
-
-				// if empty square
 				if (this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
@@ -295,12 +286,11 @@ public class Board {
 	 * @return array of positions rook can move to
 	 */
 	public ArrayList<Integer> getRookMoves(int position) {
-		int rook_offsets[] = { 16, -16, 1, -1 };
+		int rook_offsets[] = {16, -16, 1, -1};
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		for (int i : rook_offsets) {
 			int new_position = position + i;
 			while (onBoard(new_position)) {
-				// if piece is black and hits opps piece or its own piece
 				if (this.board[position] >= 7 && this.board[position] <= 12) {
 					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
@@ -310,7 +300,6 @@ public class Board {
 						break;
 					}
 				}
-				// if piece is white and hits opps piece or its own piece
 				if (this.board[position] >= 1 && this.board[position] <= 6) {
 					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
 						moves.add(new_position);
@@ -342,30 +331,23 @@ public class Board {
 	public ArrayList<Integer> getWhitePawnMoves(int position) {
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int new_position = position + 16;
-		// non capture moves
 		if (onBoard(new_position) && this.board[new_position] == 0) {
 			if (new_position >= 112 && new_position <= 119) {
-				// handle pawn promotion
 				moves.add(new_position);
 			} else {
-				// one square
 				moves.add(new_position);
-				// two squares
 				new_position = position + 32;
 				if ((position >= 16 && position <= 23) && this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
 			}
 		}
-		// capture moves
-		int Wpawn_offsets[] = { 15, 17 };
-
+		int Wpawn_offsets[] = {15, 17};
 		for (int i : Wpawn_offsets) {
 			new_position = position + i;
 			if (onBoard(new_position)) {
 				if ((new_position >= 112 && new_position <= 119)
 						&& (this.board[new_position] >= 7 && this.board[new_position] <= 12)) {
-					// handle pawn promotion
 					moves.add(new_position);
 				} else {
 					if (this.board[new_position] >= 7 && this.board[new_position] <= 12) {
@@ -389,22 +371,17 @@ public class Board {
 	public ArrayList<Integer> getBlackPawnMoves(int position) {
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int new_position = position - 16;
-		// non capture moves
 		if (onBoard(new_position) && this.board[new_position] == 0) {
 			if (new_position >= 0 && new_position <= 7) {
-				// handle pawn promotion
 				moves.add(new_position);
 			} else {
-				// one square
 				moves.add(new_position);
-				// two squares
 				new_position = position - 32;
 				if ((position >= 96 && position <= 103) && this.board[new_position] == 0) {
 					moves.add(new_position);
 				}
 			}
 		}
-		// capture moves
 		int Bpawn_offsets[] = { -15, -17 };
 		for (int i : Bpawn_offsets) {
 			new_position = position + i;
@@ -412,13 +389,11 @@ public class Board {
 			if (onBoard(new_position)) {
 				if ((new_position >= 0 && new_position <= 7)
 						&& (this.board[new_position] >= 1 && this.board[new_position] <= 6)) {
-					// handle pawn promotion
 					moves.add(new_position);
 				} else {
 					if (this.board[new_position] >= 1 && this.board[new_position] <= 6) {
 						moves.add(new_position);
 					}
-					// add enpassant
 				}
 			}
 		}
@@ -444,7 +419,7 @@ public class Board {
 			}
 		}
 		// king
-		int king_offsets[] = { 16, -16, 1, -1, 15, 17, -15, -17 };
+		int king_offsets[] = {16, -16, 1, -1, 15, 17, -15, -17};
 		for (int i : king_offsets) {
 			int new_position = position + i;
 
@@ -523,12 +498,12 @@ public class Board {
 						if (square >= 61 && square <= 71) {
 							if(board[square - 1] == 7) {
 								Move move = new Move(square, square + 15);
-								enpassant = move;
+								this.enpassant = move;
 								moves.add(move);
 							}
 							if (board[square + 1] == 7) {
 								Move move = new Move(square, square + 17);
-								enpassant = move;
+								this.enpassant = move;
 								moves.add(move);
 							}
 						}
@@ -577,6 +552,7 @@ public class Board {
 							// king side castling
 							if ((board[5] == 0) && (board[6] == 0)) {
 								if ((!this.isSquareAttacked(5, true)) && (!this.isSquareAttacked(6, true))) {
+									this.WHITE_CASTLING_SHORT = true;
 									Move move = new Move(this.king_square_white, 7);
 									moves.add(move);
 								}
@@ -584,6 +560,7 @@ public class Board {
 							// queen side castling
 							if ((board[1] == 0) && (board[2] == 0) && (board[3] == 0)) {
 								if ((!this.isSquareAttacked(4, true)) && (!this.isSquareAttacked(2, true))) {
+									this.WHITE_CASTLING_LONG = true;
 									Move move = new Move(this.king_square_white, 0);
 									moves.add(move);
 								}
@@ -605,12 +582,12 @@ public class Board {
 						if (square >= 48 && square <= 55) {
 							if(board[square - 1] == 7) {
 								Move move = new Move(square, square - 17);
-								enpassant = move;
+								this.enpassant = move;
 								moves.add(move);
 							}
 							if (board[square + 1] == 7) {
 								Move move = new Move(square, square - 15);
-								enpassant = move;
+								this.enpassant = move;
 								moves.add(move);
 							}
 						}
@@ -658,6 +635,7 @@ public class Board {
 							// king side castling
 							if ((board[117] == 0) && (board[118] == 0)) {
 								if ((!this.isSquareAttacked(116, true)) && (!this.isSquareAttacked(117, true))) {
+									this.BLACK_CASTLING_SHORT = true;
 									Move move = new Move(this.king_square_black, 119);
 									moves.add(move);
 								}
@@ -665,6 +643,7 @@ public class Board {
 							// queen side castling
 							if ((board[113] == 0) && (board[114] == 0) && (board[115] == 0)) {
 								if ((!this.isSquareAttacked(116, true)) && (!this.isSquareAttacked(115, true))) {
+									this.BLACK_CASTLING_LONG = true;
 									Move move = new Move(this.king_square_black, 112);
 									moves.add(move);
 								}
@@ -732,7 +711,7 @@ public class Board {
 		this.lastMove = move;
 		this.lastMovetook = this.board[move.to];
 		
-		if (move == enpassant) {
+		if (move == this.enpassant) {
 			if (this.colour) {
 				this.board[move.to - 16] = 0;
 				this.board[move.to] = this.board[move.from];
@@ -745,6 +724,8 @@ public class Board {
 		}
 
 		if (this.WHITE_CASTLING) {
+			this.WHITE_CASTLING_LONG = false;
+			this.WHITE_CASTLING_SHORT = false;
 			// White castling
 			if (move.from == 4) {
 				// king side
@@ -773,6 +754,8 @@ public class Board {
 		}
 		
 		if (this.BLACK_CASTLING) {
+			this.BLACK_CASTLING_LONG = false;
+			this.BLACK_CASTLING_SHORT = false;
 			// Black castling
 			if (move.from == 116) {
 				// king side

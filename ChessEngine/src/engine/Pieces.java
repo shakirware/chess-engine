@@ -3,6 +3,9 @@
  */
 package engine;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author shakir
  *
@@ -31,6 +34,15 @@ public class Pieces {
 			"bP.png", "bN.png", "bB.png", "bR.png", "bQ.png", "bK.png" };
 
 	public static final String pieces = ".PNBRQKpnbrqk";
+	
+	public static final List<String> coords = Arrays.asList(new String[] { "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1", "i1", "j1", "k1", "l1", "m1", "n1", "o1", "p1", 
+																		   "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2", "i2", "j2", "k2", "l2", "m2", "n2", "o2", "p2", 
+																		   "a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3", "i3", "j3", "k3", "l3", "m3", "n3", "o3", "p3", 
+																		   "a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4", "i4", "j4", "k4", "l4", "m4", "n4", "o4", "p4", 
+																		   "a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5", "i5", "j5", "k5", "l5", "m5", "n5", "o5", "p5", 
+																		   "a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6", "i6", "j6", "k6", "l6", "m6", "n6", "o6", "p6", 
+																		   "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7", "i7", "j7", "k7", "l7", "m7", "n7", "o7", "p7",
+																		   "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8", "i8", "j8", "k8", "l8", "m8", "n8", "o8", "p8" });
 
 	public static final int[] boardEmpty = new int[] { EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
 			EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
@@ -153,7 +165,7 @@ public class Pieces {
 			0x64A53DC924FE7AC9L, 0x142DE49FFF7A7C3DL, 0x0C335248857FA9E7L, 0x0A9C32D5EAE45305L, 0xE6C42178C4BBB92EL, 0x71F1CE2490D20B07L, 0xF1BCC3D275AFE51AL,
 			0xE728E8C83C334074L, 0x96FBF83A12884624L, 0x81A1549FD6573DA5L, 0x5FA7867CAF35E149L, 0x56986E2EF3ED091BL, 0x917F1DD5F8886C61L, 0xD20D8C88C8FFE65FL,
 			0x31D71DCE64B2C310L, 0xF165B587DF898190L, 0xA57E6339DD2CF3A0L, 0x1EF6E6DBB1961EC9L, 0x70CC73D90BC26E24L, 0xE21A6B35DF0C3AD7L, 0x003A93D8B2806962L,
-			0x1C99DED33CB890A1L, 0xCF3145DE0ADD4289L, 0xD0E4427A5514FB72L, 0x77C621CC9FB3A483L, 0x67A34DAC4356550BL, 0xF8D626AAAF278509L,};
+			0x1C99DED33CB890A1L, 0xCF3145DE0ADD4289L, 0xD0E4427A5514FB72L, 0x77C621CC9FB3A483L, 0x67A34DAC4356550BL, 0xF8D626AAAF278509L};
 }
 
 

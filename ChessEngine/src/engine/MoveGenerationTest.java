@@ -197,13 +197,14 @@ public class MoveGenerationTest {
 	
 	@Test
 	public void testEnPassant() {
-		Board board = new Board("rnbqkbnr/ppp1pppp/8/3P4/8/8/PPP1PPPP/RNBQKBNR w - - 0 1");
+		Board board = new Board("rnbqkbnr/ppp1pppp/8/3P4/8/8/PPP1PPPP/RNBQKBNR w KQkq - 0 1");
 		Move move = new Move(100, 68);
 		Move enpassantMove = new Move(67, 84);
 		
 		board.makeMove(move);
 
 		ArrayList<Move> moves = board.getLegalMoves(true);
+		
 		assertTrue(moves.contains(enpassantMove));
 	}
 

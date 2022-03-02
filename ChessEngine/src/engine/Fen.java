@@ -16,9 +16,12 @@ public class Fen {
 		String fen = split[0];
 		//String turn = split[1];
 		String castling = split[2];
-		// String enpassant = split[3];
+		String enpassant = split[3];
+		
+		
+		board.FenEnPassant = enpassant;
+		
 		int count = 0;
-
 		for (int rank = 7; rank >= 0; rank--) {
 			for (int file = 0; file < 16; file++) {
 				int square = rank * 16 + file;
@@ -46,15 +49,26 @@ public class Fen {
 			}
 		}
 		
-		if (castling.contains("Q") || castling.contains("K")) {
-		    board.WHITE_CASTLING = true;
-		} else if (castling.contains("q") || castling.contains("k")) {
-			board.BLACK_CASTLING = true;
-			System.out.println("yessir");
-		} else {
-			board.WHITE_CASTLING = false;
-			board.BLACK_CASTLING = false;
+		if (castling.contains("K")) {
+			board.WHITE_CASTLING = true;
+			board.WHITE_CASTLING_SHORT = true;
 		}
+		
+		if (castling.contains("Q")) {
+			board.WHITE_CASTLING = true;
+			board.WHITE_CASTLING_LONG = true;
+		}
+		
+		if (castling.contains("k")) {
+			board.BLACK_CASTLING = true;
+			board.BLACK_CASTLING_SHORT = true;
+		}
+		
+		if (castling.contains("q")) {
+			board.BLACK_CASTLING = true;
+			board.BLACK_CASTLING_LONG = true;
+		}
+		
 		
 		return this.board;
 	}
