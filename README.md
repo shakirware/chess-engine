@@ -1,6 +1,7 @@
-# chess-engine
+# Java Chess Engine
 Chess Engine made in pure Java.
 
+## Screenshot
 
 ![chessengine](https://user-images.githubusercontent.com/25272123/156485142-58c77069-57d0-4e78-8a97-b2dd19f1eb33.png)
 
