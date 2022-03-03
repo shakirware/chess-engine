@@ -43,7 +43,7 @@ public class Controller implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		paneList = new ArrayList<>();
 		paneArray = new Pane[8][8];
-		this.board = new Board("rq1k4/7b/8/8/8/8/2P5/2K5 w - - 4 3");
+		this.board = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	}
 
 	@FXML
@@ -94,6 +94,8 @@ public class Controller implements Initializable {
 									if (bookMoves.size() != 0) {
 										Random rand = new Random();
 										Move bookMove = bookMoves.get(rand.nextInt(bookMoves.size()));
+										System.out.print("BOOK MOVE - ");
+										bookMove.output();
 										this.board.makeMove(bookMove);
 									} else {
 										Move ai_move = MiniMaxAB.getNextMove(this.board, BLACK);

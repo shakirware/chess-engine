@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Book {
 	
-	private static String bookName = "Human.bin";
+	private static String bookName = "Perfect2021.bin";
 	
 	private static String int2MoveString(short move) {
 		StringBuilder sb = new StringBuilder();

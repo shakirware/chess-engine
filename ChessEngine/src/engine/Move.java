@@ -3,6 +3,8 @@
  */
 package engine;
 
+import static engine.Pieces.coords;
+
 /**
  * @author shakir
  *
@@ -19,8 +21,7 @@ public class Move {
 	
 
 	public void output() {
-		System.out.println("FROM: " + this.from + "    " + "TO: "+ this.to);
-
+		System.out.println("FROM: " + coords.get(this.from) + "    " + "TO: " + coords.get(this.to));
 	}
 
 	@Override
