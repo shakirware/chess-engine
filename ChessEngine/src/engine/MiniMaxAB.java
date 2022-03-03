@@ -1,13 +1,13 @@
 package engine;
 
+import static engine.Pieces.BLACK;
+import static engine.Pieces.WHITE;
+
 import java.util.ArrayList;
 
-import static engine.Pieces.*;
-
-public class MiniMax {
-	
-	static int winVal = Integer.MAX_VALUE;
-    static int loseVal = Integer.MIN_VALUE;
+public class MiniMaxAB {
+	static int winVal = 999999999;
+    static int loseVal = -999999999;
 	
 	static Move nextMove;
 	static int depth;
@@ -42,14 +42,14 @@ public class MiniMax {
 
 	public static Move getNextMove(Board board, boolean side) {
 		counter = 0;
-		Move move = minimax(board, BLACK, 3);
+		Move move = minimax(board, BLACK, 4);
 		System.out.println("Boards evaluated: " + counter);
 		return move;
 	}
 
-	private static int max(Board board, boolean colour, int d) {
+	private static int max(Board board, boolean colour, int d, int alpha, int beta) {
 		counter++;
-		if (board.isStalemate(BLACK) || board.isStalemate(WHITE) || board.inCheckmate() || d > MiniMax.tempDepth) {
+		if (board.isStalemate(BLACK) || board.isStalemate(WHITE) || board.inCheckmate() || d > MiniMaxAB.tempDepth) {
 			return eval(board, BLACK, d);
 		}
 		int best = loseVal;
@@ -58,18 +58,25 @@ public class MiniMax {
 		for (Move move : moves) {
 			Board b = new Board(board);
 			b.makeMove(move);	
-			current = min(b, WHITE, d + 1);
+			current = min(b, WHITE, d + 1, alpha, beta);
 			b.undoLastMove();
 			if (current > best) {
 				best = current;
+			}
+			
+			if (best > beta) {
+				return best;
+			}
+			if (best > alpha) {
+				alpha = best;
 			}
 		}
 		return best;
 	}
 
-	private static int min(Board board, boolean colour, int d) {
+	private static int min(Board board, boolean colour, int d, int alpha, int beta) {
 		counter++;
-		if (board.isStalemate(BLACK) || board.isStalemate(WHITE) || board.inCheckmate() || d > MiniMax.tempDepth) {
+		if (board.isStalemate(BLACK) || board.isStalemate(WHITE) || board.inCheckmate() || d > MiniMaxAB.tempDepth) {
 			return eval(board, WHITE, d);
 		}
 
@@ -79,11 +86,20 @@ public class MiniMax {
 		for (Move move : moves) {
 			Board b = new Board(board);
 			b.makeMove(move);
-			current = max(b, BLACK, d);
+			current = max(b, BLACK, d + 1, alpha, beta);
 			b.undoLastMove();
 			if (current < best) {
 				best = current;
 			}
+			
+			if (best < alpha) {
+				return best;
+			}
+			
+			if (best < beta) {
+				beta = best;
+			}
+			
 		}
 		return best;
 	}
@@ -91,22 +107,22 @@ public class MiniMax {
 	private static Move minimax(Board board, boolean colour, int maxDepth) {
 		counter++;
 		
-		for (MiniMax.depth = 1; MiniMax.depth < maxDepth; MiniMax.depth++) {
+		for (MiniMaxAB.depth = 1; MiniMaxAB.depth < maxDepth; MiniMaxAB.depth++) {
 			int current = loseVal;
 			int best = loseVal;
 			int index = 0;
 			int bestIndex = 0;
 
-			MiniMax.tempDepth = MiniMax.depth;
+			MiniMaxAB.tempDepth = MiniMaxAB.depth;
 
 			ArrayList<Move> moves = board.getLegalMoves(BLACK);
 			for (Move move : moves) {
 				Board b = new Board(board);
 				b.makeMove(move);
-				current = min(b, WHITE, 1);
+				current = min(b, WHITE, 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
 				b.undoLastMove();
 				
-				if (best <= current) {
+				if (current > best) {
 					best = current;
 					bestIndex = index;
 				}
@@ -118,8 +134,7 @@ public class MiniMax {
 				return moves.get(bestIndex);
 			}
 
-			if ((MiniMax.depth + 1) == maxDepth) {
-				//System.out.println(depth);
+			if ((MiniMaxAB.depth + 1) == maxDepth) {
 				return moves.get(bestIndex);
 			}
 
@@ -131,9 +146,9 @@ public class MiniMax {
 
 	public static int eval(Board board, boolean colour, int d) {
 		if (board.isCheckmate(WHITE)) {
-			if (d <= MiniMax.tempDepth) {
-				System.out.println("Found a win - DepthLimit = " + d + " " + MiniMax.tempDepth);
-				MiniMax.tempDepth = d;
+			if (d <= MiniMaxAB.tempDepth) {
+				//System.out.println("Found a win - DepthLimit = " + d + " " + MiniMaxAB.tempDepth);
+				MiniMaxAB.tempDepth = d;
 				//System.out.println("Found a win - DepthLimit = " + depth);
 				return winVal;
 			} else {
@@ -141,7 +156,7 @@ public class MiniMax {
 			}
 		}
 
-		if (board.isStalemate(colour) || board.isStalemate(!colour) || board.isCheckmate(colour)) {
+		if (board.isStalemate(colour) || board.isStalemate(!colour)) {
 			return loseVal;
 		}
 		
@@ -266,4 +281,5 @@ public class MiniMax {
 		int[] coords = { x, y };
 		return coords;
 	}
+
 }

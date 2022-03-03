@@ -724,12 +724,13 @@ public class Board {
 		}
 
 		if (this.WHITE_CASTLING) {
-			this.WHITE_CASTLING_LONG = false;
-			this.WHITE_CASTLING_SHORT = false;
 			// White castling
 			if (move.from == 4) {
 				// king side
 				if (move.to == 7) {
+					this.WHITE_CASTLING_LONG = false;
+					this.WHITE_CASTLING_SHORT = false;
+					this.WHITE_CASTLING = false;
 					this.king_square_white = 6;
 					// move king to g1
 					this.board[6] = this.board[4];
@@ -737,9 +738,14 @@ public class Board {
 					// move rook to f1
 					this.board[5] = this.board[7];
 					this.board[7] = 0;
+					this.colour = !this.colour;
+					return;
 				}
 				// queen side
 				if (move.to == 0) {
+					this.WHITE_CASTLING_LONG = false;
+					this.WHITE_CASTLING_SHORT = false;
+					this.WHITE_CASTLING = false;
 					this.king_square_white = 2;
 					// move king to c1
 					this.board[2] = this.board[4];
@@ -747,19 +753,20 @@ public class Board {
 					// move rook to d1
 					this.board[3] = this.board[0];
 					this.board[0] = 0;
+					this.colour = !this.colour;
+					return;
 				}
-				this.colour = !this.colour;
-				return;
 			}
 		}
 		
 		if (this.BLACK_CASTLING) {
-			this.BLACK_CASTLING_LONG = false;
-			this.BLACK_CASTLING_SHORT = false;
 			// Black castling
 			if (move.from == 116) {
 				// king side
 				if (move.to == 119) {
+					this.BLACK_CASTLING_LONG = false;
+					this.BLACK_CASTLING_SHORT = false;
+					this.BLACK_CASTLING = false;
 					this.king_square_black = 118;
 					// move king to g8
 					this.board[116] = this.board[118];
@@ -767,9 +774,14 @@ public class Board {
 					// move rook to f8
 					this.board[119] = this.board[117];
 					this.board[119] = 0;
+					this.colour = !this.colour;
+					return;
 				}
 				// queen side
 				if (move.to == 112) {
+					this.BLACK_CASTLING_LONG = false;
+					this.BLACK_CASTLING_SHORT = false;
+					this.BLACK_CASTLING = false;
 					this.king_square_black = 114;
 					// move king to c8
 					this.board[116] = this.board[114];
@@ -777,10 +789,10 @@ public class Board {
 					// move rook to d8
 					this.board[112] = this.board[115];
 					this.board[112] = 0;
+					this.colour = !this.colour;
+					return;
 
 				}
-				this.colour = !this.colour;
-				return;
 			}
 		}
 

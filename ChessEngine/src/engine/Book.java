@@ -3,10 +3,69 @@ package engine;
 import static engine.Pieces.random64;
 import static engine.Pieces.coords;
 
-import java.util.Arrays;
-import java.util.List;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
 
 public class Book {
+	
+	private static String bookName = "Human.bin";
+	
+	private static String int2MoveString(short move) {
+		StringBuilder sb = new StringBuilder();
+		sb.append((char) ('a' + ((move >> 6) & 0x7)));
+		sb.append(((move >> 9) & 0x7) + 1);
+		sb.append((char) ('a' + (move & 0x7)));
+		sb.append(((move >> 3) & 0x7) + 1);
+		if (((move >> 12) & 0x7) != 0) sb.append("NBRQ".charAt(((move >> 12) & 0x7) - 1));
+		return sb.toString();
+	}
+	
+	
+	public static ArrayList<Move> getMoves(Board board, boolean colour) {
+		Move move = null;
+		ArrayList<Move> moves = new ArrayList<Move>();
+		long BoardKey = Book.getKey(board, colour);
+		//System.out.println(String.format("%11X", BoardKey));
+		
+		try {
+			DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(new File(bookName))));
+			
+			while (true) {
+				long key = dataInputStream.readLong();
+				if (key == BoardKey) {
+					short moveInt = dataInputStream.readShort();
+					dataInputStream.readShort(); // weight
+					dataInputStream.readInt();
+					
+					String moveString = int2MoveString(moveInt);
+					
+					int fromIndex = coords.indexOf(moveString.substring(0, 2));
+					int toIndex = coords.indexOf(moveString.substring(2, 4));
+					
+					move = new Move(fromIndex, toIndex);
+					
+					if (board.isLegal(move, colour)) {
+						moves.add(move);
+					}
+					
+
+				} else {
+					dataInputStream.skipBytes(8);
+				}
+			}
+			
+		} catch (Exception ignored) {
+			//e.printStackTrace();
+		}
+		
+		return moves;
+	}
+	
+	
+	
 
 	public static boolean pawnForCapture(Board board) {
 
@@ -14,9 +73,7 @@ public class Book {
 		int targetPce = board.colour ? 1 : 7;
 
 		if (!board.FenEnPassant.equals("-")) {
-			System.out.println(board.FenEnPassant);
 			int index = coords.indexOf(board.FenEnPassant);
-			System.out.println(index);
 			if (board.colour) {
 				sqWithPawn = index - 16;
 			} else {
@@ -32,7 +89,7 @@ public class Book {
 		return false;
 	}
 
-	public static long getKey(Board board) {
+	public static long getKey(Board board, boolean colour) {
 		long key = 0;
 
 		int[] p = { -1, 1, 3, 5, 7, 9, 11, 0, 2, 4, 6, 8, 10 };
@@ -54,7 +111,6 @@ public class Book {
 		int offset = 768;
 
 		if (board.WHITE_CASTLING_SHORT) {
-			System.out.println("test");
 			key ^= random64[offset + 0];
 		}
 		if (board.WHITE_CASTLING_LONG) {
@@ -90,7 +146,7 @@ public class Book {
 
 		// side
 
-		if (board.colour) {
+		if (colour) {
 			key ^= random64[780];
 		}
 

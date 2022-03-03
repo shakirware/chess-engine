@@ -15,9 +15,9 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 
 import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
 
 import java.net.URL;
 
@@ -43,7 +43,7 @@ public class Controller implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		paneList = new ArrayList<>();
 		paneArray = new Pane[8][8];
-		this.board = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - - 0 1");
+		this.board = new Board("rq1k4/7b/8/8/8/8/2P5/2K5 w - - 4 3");
 	}
 
 	@FXML
@@ -72,27 +72,35 @@ public class Controller implements Initializable {
 							from = square;
 						} else {
 							to = square;
-							
+
 							Move playerMove = new Move(from, to);
 							System.out.print("PLAYER MOVE - ");
 							playerMove.output();
-							
+
 							ArrayList<Move> moves = this.board.getLegalMoves(true);
-							
+
 							for (Move LegalMove : moves) {
 								if (LegalMove.equals(playerMove)) {
 									this.board.makeMove(playerMove);
 									initBoard();
-									
+
 									if (this.board.inCheckmate()) {
 										mateAlert();
 										return;
 									}
 
-									Move ai_move = MiniMax.getNextMove(this.board, BLACK);
-									System.out.print("COMPUTER MOVE - ");
-									ai_move.output();
-									this.board.makeMove(ai_move);
+									ArrayList<Move> bookMoves = Book.getMoves(this.board, BLACK);
+					
+									if (bookMoves.size() != 0) {
+										Random rand = new Random();
+										Move bookMove = bookMoves.get(rand.nextInt(bookMoves.size()));
+										this.board.makeMove(bookMove);
+									} else {
+										Move ai_move = MiniMaxAB.getNextMove(this.board, BLACK);
+										System.out.print("COMPUTER MOVE - ");
+										ai_move.output();
+										this.board.makeMove(ai_move);
+									}
 									initBoard();
 								}
 							}
@@ -111,21 +119,17 @@ public class Controller implements Initializable {
 					if (i % 2 == 0) {
 						if (j % 2 == 0) {
 							// light
-							pane.setStyle(light + "-fx-background-image: url('" + pieceImages[piece] + "');"
-									+ bc);
+							pane.setStyle(light + "-fx-background-image: url('" + pieceImages[piece] + "');" + bc);
 
 						} else {
 							// dark
-							pane.setStyle(dark + "-fx-background-image: url('" + pieceImages[piece] + "');"
-									+ bc);
+							pane.setStyle(dark + "-fx-background-image: url('" + pieceImages[piece] + "');" + bc);
 						}
 					} else {
 						if (j % 2 != 0) {
-							pane.setStyle(light + "-fx-background-image: url('" + pieceImages[piece] + "');"
-									+ bc);
+							pane.setStyle(light + "-fx-background-image: url('" + pieceImages[piece] + "');" + bc);
 						} else {
-							pane.setStyle(dark + "-fx-background-image: url('" + pieceImages[piece] + "');"
-									+ bc);
+							pane.setStyle(dark + "-fx-background-image: url('" + pieceImages[piece] + "');" + bc);
 						}
 					}
 				} else {
@@ -149,7 +153,7 @@ public class Controller implements Initializable {
 			}
 		}
 	}
-	
+
 	public void mateAlert() {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setContentText("Checkmate sir!");
@@ -223,7 +227,7 @@ public class Controller implements Initializable {
 			x = index - 56;
 			x = index % 8;
 		}
-		int[] coords = {x, y};
+		int[] coords = { x, y };
 		return coords;
 	}
 
