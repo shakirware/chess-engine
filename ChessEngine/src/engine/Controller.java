@@ -30,9 +30,6 @@ public class Controller implements Initializable {
 	@FXML
 	private Button start;
 
-	private Pane[][] paneArray;
-	private List<Pane> paneList;
-
 	private Pane paneToMove;
 	private int from;
 	private int to;
@@ -41,9 +38,7 @@ public class Controller implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		paneList = new ArrayList<>();
-		paneArray = new Pane[8][8];
-		this.board = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+		this.board = new Board("5r2/q3k3/b1pp4/2n1p1b1/2P1P3/1p1P1Q1P/1P2NPP1/3RK2R w - - 0 1");
 	}
 
 	@FXML
@@ -56,8 +51,6 @@ public class Controller implements Initializable {
 				int piece = board[square];
 
 				Pane pane = new Pane();
-				paneList.add(pane);
-				paneArray[i][j] = pane;
 
 				pane.setOnMousePressed((MouseEvent event) -> {
 
