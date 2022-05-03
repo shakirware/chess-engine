@@ -14,7 +14,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 
-import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.ResourceBundle;

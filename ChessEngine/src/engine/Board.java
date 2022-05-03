@@ -42,24 +42,36 @@ public class Board {
 	 */
 	public int lastMovetook;
 	/**
-	 * Castling rights for White
+	 * Castling rights for White.
 	 */
 	public boolean WHITE_CASTLING = false;
 	/**
-	 * Castling rights for Black
+	 * Castling rights for Black.
 	 */
 	public boolean BLACK_CASTLING = false;
-	
-	public boolean WHITE_CASTLING_SHORT = false;
-	public boolean WHITE_CASTLING_LONG = false;
-	public boolean BLACK_CASTLING_SHORT = false;
-	public boolean BLACK_CASTLING_LONG = false;
-	
 	/**
-	 * Current enpassant move
+	 * True if white can castle king side.
+	 */
+	public boolean WHITE_CASTLING_SHORT = false;
+	/**
+	 * True if white can castle queen side.
+	 */
+	public boolean WHITE_CASTLING_LONG = false;
+	/**
+	 * True if black can castle king side.
+	 */
+	public boolean BLACK_CASTLING_SHORT = false;
+	/**
+	 * True if black can castle queen side.
+	 */
+	public boolean BLACK_CASTLING_LONG = false;
+	/**
+	 * Current enpassant move.
 	 */
 	public Move enpassant = null;
-	
+	/**
+	 * Enpassant square from FEN string.
+	 */
 	public String FenEnPassant = null;
 	
 	/**
@@ -400,6 +412,15 @@ public class Board {
 		return moves;
 	}
 
+	/**
+	 * Returns true if the position is under attack by a piece of the opposite 
+	 * colour.
+	 *
+	 * @param position an integer representing the position of a square
+	 * @param colour colour of the current player
+	 * 
+	 * @return true only if the position is under attack.
+	 */
 	public boolean isSquareAttacked(int position, boolean colour) {
 		// pawns
 		if (colour) {
